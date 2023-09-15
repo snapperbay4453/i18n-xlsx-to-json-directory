@@ -1,0 +1,27 @@
+{
+  "extends": [ "eslint:recommended" ],
+  "overrides": [
+    {
+      "files": [ "**/*.ts?(x)" ],
+      "parser": "@typescript-eslint/parser"
+    },
+    {
+      "files": [ "**/*.js?(x)" ],
+      "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": "esnext"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "node_modules/",
+    "**/node_modules/",
+    "/**/node_modules/*",
+    "out/",
+    "dist/",
+    "build/"
+  ],
+  "rules": {
+    "no-undef": "warn"
+  }
+}

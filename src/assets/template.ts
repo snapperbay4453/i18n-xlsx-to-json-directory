@@ -1,4 +1,6 @@
-export const templateCommonJsonArray = [
+import type { Column } from '@/consts/code';
+
+export const templateCommonJsonArray: Column[] = [
   {
     "code": "add",
     "en": "Add",
@@ -16,7 +18,7 @@ export const templateCommonJsonArray = [
   },
 ];
 
-export const templatePageJsonArray = [
+export const templatePageJsonArray: Column[] = [
   {
     "code": "title",
     "en": "Page Title",

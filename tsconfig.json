@@ -1,13 +1,28 @@
 {
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"],
 	"compilerOptions": {
-		"target": "ES2020",
+		"baseUrl": ".",
+    "target": "es5",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"noEmit": true,
 		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
 		"checkJs": true,
-		"jsx": "react-jsx",
-		"jsxImportSource": "preact"
-	},
-	"include": ["node_modules/vite/client.d.ts", "**/*"]
+		"declaration": true,  
+    "declarationDir": "dist/types",
+    "importHelpers": true,
+		"lib": [ 
+			"dom",
+			"esnext",
+			"webworker"
+		],
+		"paths": {
+      "@/*": [ "src/*" ],
+      "file-saver-es": [
+        "@types/file-saver"
+      ]
+    }
+	}
 }
