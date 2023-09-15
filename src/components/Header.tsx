@@ -9,12 +9,14 @@ export function Header() {
 				<a href="/" class={url == '/' && 'active'}>
 					Home
 				</a>
-				<a href="/json-to-xlsx" class={url == '/json-to-xlsx' && 'active'}>
-					Json to Xlsx
-				</a>
-				<a href="/xlsx-to-json" class={url == '/xlsx-to-json' && 'active'}>
-					Xlsx to Json
-				</a>
+				{/*
+					<a href="/json-to-xlsx" class={url == '/json-to-xlsx' && 'active'}>
+						Json to Xlsx
+					</a>
+					<a href="/xlsx-to-json" class={url == '/xlsx-to-json' && 'active'}>
+						Xlsx to Json
+					</a>
+				*/}
 				<a href="/404" class={url == '/404' && 'active'}>
 					404
 				</a>
