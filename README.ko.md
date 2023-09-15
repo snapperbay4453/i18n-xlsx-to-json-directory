@@ -1,10 +1,10 @@
 # i18n-xlsx-to-json-directory
 
-Library that converts and downloads multilingual data stored in .xlsx files into a json directory structure.
+.xlsx 파일에 저장된 다국어 데이터를 json 디렉토리 구조로 변환 및 다운로드하는 라이브러리입니다.
 
-The directory structure is tailored to the i18next library.
+디렉토리 구조는 i18next 라이브러리에 맞추어져 있습니다.
 
-## Usage
+## 사용법
 
 ```javascript
 import {
@@ -15,20 +15,19 @@ import {
 
 ### createTemplateI18nXlsx
 
-Create and download template .xlsx files.
+템플릿 .xlsx 파일을 생성 및 다운로드합니다.
 
 ### convertI18XlsxToJsonDirectory
 
-Convert the .xlsx file to the json directory structure, then compress it to create and download the zip file.
+.xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
 
-## Contributing
+## 기여
 
-Pull requests are always welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+풀 리퀘스트는 언제나 환영입니다. 주요 변경 사항에 대해서는 먼저 이슈를 열어 변경 사항을 논의해주세요.
 
-Please make sure to update tests as appropriate.
+테스트를 적절하게 업데이트해 주시기 바랍니다.
 
-## License
+## 라이선스
 
 [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 

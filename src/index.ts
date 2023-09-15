@@ -23,6 +23,7 @@ interface WorkSheetGroupJson {
 */
 
 // https://eblo.tistory.com/84
+// https://redstapler.co/sheetjs-tutorial-create-xlsx/
 function stringToArrayBuffer(s) { 
   var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
   var view = new Uint8Array(buf);  //create uint8array as viewer
@@ -58,13 +59,13 @@ const addWorkSheetJsonToWorkbook = (workBook: XLSX.WorkBook, workSheetName: stri
 
 const saveWorkBookXlsx = (filename: string, workBook: XLSX.WorkBook) => {
   const workBookOut = XLSX.write(workBook, { bookType: 'xlsx',  type: 'binary' });
-  saveAs(new Blob([stringToArrayBuffer(workBookOut)], { type: 'application/octet-stream' }), filename);
+  saveAs(new Blob([stringToArrayBuffer(workBookOut)], { type: 'application/octet-stream' }), `${filename}.xlsx`);
 };
 
 
 
 export const createTemplateI18nXlsx = () => {
-  const templateXlsxFilename = `template_${(new Date().getTime())}.xlsx`;
+  const templateXlsxFilename = `template_${(new Date().getTime())}`;
 
   const workBook: XLSX.WorkBook = createNewWorkBook();
   addWorkSheetJsonToWorkbook(workBook, 'common', templateCommonJsonArray);
@@ -72,7 +73,9 @@ export const createTemplateI18nXlsx = () => {
   saveWorkBookXlsx(templateXlsxFilename, workBook);
 };
 
-export const convertI18XlsxToJsonDirectory = async (file: Blob) => {
+export const convertI18XlsxToJsonDirectory = (file: Blob) => {
+  const outputJsonDirectoryName = `output_${(new Date().getTime())}`;
+
   const fileReader = new FileReader();
   fileReader.readAsArrayBuffer(file);
   fileReader.onload = async (e) => {
@@ -102,13 +105,13 @@ export const convertI18XlsxToJsonDirectory = async (file: Blob) => {
         })
       });
     });
-    await saveI18nJsonZip('test', i18nJson);
+    await saveI18nJsonZip(outputJsonDirectoryName, i18nJson);
   };
 };
 
 /*
 export const jsonToXlsx = (filename: string, workSheetGroupJson: WorkSheetGroupJson) => {
-  const xlsxFilename = `${filename}_${(new Date().getTime())}.xlsx`;
+  const xlsxFilename = `${filename}_${(new Date().getTime())}`;
 
   const workBook: XLSX.WorkBook = createNewWorkBook();
 
