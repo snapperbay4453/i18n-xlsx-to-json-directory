@@ -32,7 +32,7 @@ Please make sure to update tests as appropriate.
 
 [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
-## 참조
+## Reference
 
 * [https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html](https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html)
 * [https://git.sheetjs.com/sheetjs/sheetjs/src/commit/9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup](https://git.sheetjs.com/sheetjs/sheetjs/src/commit/
