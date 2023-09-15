@@ -23,10 +23,14 @@ node_modules
 
 # dev
 src
+.eslintrc.js
 .eslintrc.json
 .gitignore
+rollup.config.js
 rollup.config.json
+rollup.config.mjs
 tsconfig.json
 
 # GIT
 .git
+.github
