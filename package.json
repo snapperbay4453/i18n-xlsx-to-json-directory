@@ -23,23 +23,23 @@
 		"watch": "rollup -cw"
 	},
 	"dependencies": {
+		"file-saver-es": "^2.0.5",
+		"jszip": "^3.10.1",
+		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
+	},
+	"devDependencies": {
 		"@rollup/plugin-alias": "^5.0.0",
 		"@rollup/plugin-eslint": "^9.0.4",
 		"@rollup/plugin-node-resolve": "^15.2.1",
 		"@rollup/plugin-terser": "^0.4.3",
-		"file-saver-es": "^2.0.5",
-		"jszip": "^3.10.1",
-		"rollup": "^3.29.1",
-		"rollup-plugin-commonjs": "^10.1.0",
-		"rollup-plugin-dts": "^6.0.2",
-		"rollup-plugin-typescript2": "^0.35.0",
-		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"
-	},
-	"devDependencies": {
 		"@types/file-saver": "^2.0.5",
 		"@types/node": "^20.6.0",
 		"@typescript-eslint/parser": "^6.7.0",
 		"eslint": "^8.49.0",
+		"rollup": "^3.29.1",
+		"rollup-plugin-commonjs": "^10.1.0",
+		"rollup-plugin-dts": "^6.0.2",
+		"rollup-plugin-typescript2": "^0.35.0",
 		"tslib": "^2.6.2",
 		"typescript": "^5.2.2"
 	},
