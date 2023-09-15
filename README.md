@@ -23,6 +23,6 @@ import {
 
 ## 참조
 
-[https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html](https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html)
-[https://chanyeong.com/blog/post/54](https://chanyeong.com/blog/post/54)
-[https://git.sheetjs.com/sheetjs/sheetjs/src/commit/9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup](https://git.sheetjs.com/sheetjs/sheetjs/src/commit/9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup)
+* [https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html](https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html)
+* [https://chanyeong.com/blog/post/54](https://chanyeong.com/blog/post/54)
+* [https://git.sheetjs.com/sheetjs/sheetjs/src/commit/9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup](https://git.sheetjs.com/sheetjs/sheetjs/src/commit/9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup)
