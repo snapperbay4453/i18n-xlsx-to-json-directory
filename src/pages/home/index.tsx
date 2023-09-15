@@ -18,13 +18,13 @@ export default () => {
 			<a href='https://preactjs.com' target='_blank'>
 				<img src={preactLogo} alt='Preact logo' height='160' width='160' />
 			</a>
-			<h1>I18n Json-Xlsx Converter</h1>
+			<h1>I18n json-xlsx Converter</h1>
 			<div>
-				<h2>Xlsx template</h2>
+				<h2>Download xlsx template</h2>
 				<button type='button' onClick={createTemplateXlsx}>Download xlsx template</button>
 			</div>
 			<div>
-				<h2>Convert to json</h2>
+				<h2>Convert xlsx to json</h2>
 			  <input ref={fileInputRef} type='file' />
 				<button type='button' onClick={downloadI18nJsonZip}>Download json zip</button>
 			</div>

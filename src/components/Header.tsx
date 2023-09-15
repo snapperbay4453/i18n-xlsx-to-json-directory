@@ -16,10 +16,10 @@ export function Header() {
 					<a href="/xlsx-to-json" class={url == '/xlsx-to-json' && 'active'}>
 						Xlsx to Json
 					</a>
+					<a href="/404" class={url == '/404' && 'active'}>
+						404
+					</a>
 				*/}
-				<a href="/404" class={url == '/404' && 'active'}>
-					404
-				</a>
 			</nav>
 		</header>
 	);
