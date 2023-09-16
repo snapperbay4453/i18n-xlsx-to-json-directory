@@ -12,6 +12,7 @@
 		"checkJs": true,
 		"declaration": true,  
     "declarationDir": "dist/types",
+    "downlevelIteration": true,
     "importHelpers": true,
 		"lib": [ 
 			"dom",

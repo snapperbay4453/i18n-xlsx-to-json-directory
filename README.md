@@ -9,7 +9,8 @@ The directory structure is tailored to the i18next library.
 ```javascript
 import {
   createTemplateI18nXlsx,
-  convertI18XlsxToJsonDirectory
+  convertI18XlsxToJsonDirectoryZip,
+  convertJsonDirectoryZipToI18Xlsx,
 } from 'i18n-xlsx-to-json-directory';
 ```
 
@@ -17,9 +18,13 @@ import {
 
 Create and download template .xlsx files.
 
-### convertI18XlsxToJsonDirectory
+### convertI18XlsxToJsonDirectoryZip
 
 Convert the .xlsx file to the json directory structure, then compress it to create and download the zip file.
+
+### convertI18XlsxToJsonDirectoryZip
+
+Analyze the .zip file, then create and download the .xlsx file.
 
 ## Contributing
 
