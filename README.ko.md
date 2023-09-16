@@ -22,7 +22,7 @@ import {
 
 .xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 .zip 파일을 생성 및 다운로드합니다.
 
-### convertI18XlsxToJsonDirectoryZip
+### convertJsonDirectoryZipToI18Xlsx
 
 .zip 파일을 분석한 후, .xlsx 파일을 생성 및 다운로드합니다.
 

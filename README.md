@@ -22,7 +22,7 @@ Create and download template .xlsx files.
 
 Convert the .xlsx file to the json directory structure, then compress it to create and download the zip file.
 
-### convertI18XlsxToJsonDirectoryZip
+### convertJsonDirectoryZipToI18Xlsx
 
 Analyze the .zip file, then create and download the .xlsx file.
 
