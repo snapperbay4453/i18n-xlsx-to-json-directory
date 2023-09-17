@@ -26,6 +26,11 @@ Convert the .xlsx file to the json directory structure, then compress it to crea
 
 Analyze the .zip file, then create and download the .xlsx file.
 
+#### options
+
+createDefaultExportFileType: Create a default index script file to export each language and namespace. ('js' || 'ts' || undefined)
+
+
 ## Contributing
 
 Pull requests are always welcome. For major changes, please open an issue first

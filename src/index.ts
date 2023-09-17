@@ -42,22 +42,65 @@ const getByteSize = (targetString: string) => {
 const stringToArrayBuffer = (s) => { 
   const buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
   let view = new Uint8Array(buf);  //create uint8array as viewer
-  for (let i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+  for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
   return buf;    
 }
 
-const saveI18nJsonZip = async (zipName: string, i18nJson: I18nJson) => {
+const createLanguageIndexJsString = (languages: string[]) => {
+  let lines = [];
+  languages.forEach((language: string) => lines.push(`import ${language} from './${language}';`));
+  lines.push('');
+  lines.push(`export { ${languages.map((language: string) => `${language}`).join(', ')} };`);
+  return lines.join('\n');
+}
+
+const createNamespaceIndexJsString = (namespaces: string[]) => {
+  let lines = [];
+  namespaces.forEach((namespace: string) => lines.push(`import ${namespace} from './${namespace}.json';`));
+  lines.push('');
+  lines.push(`export { ${namespaces.map((namespace: string) => `${namespace}`).join(', ')} };`);
+  return lines.join('\n');
+}
+
+const saveI18nJsonZip = async (
+  zipName: string,
+  i18nJson: I18nJson, {
+    createDefaultExportFileType = undefined
+  } = {}
+) => {
   const jsZip: JSZip = new JSZip();
-  Object.keys(i18nJson).forEach((languageCode: string) => {
-    jsZip.folder(languageCode);
-    Object.keys(i18nJson[languageCode]).forEach((languageNamespaceName: string) => {
+  const languages = Object.keys(i18nJson);
+
+  languages.forEach((language: string) => {
+
+    jsZip.folder(language);
+
+    const namespaces = Object.keys(i18nJson[language]);
+    namespaces.forEach((languageNamespaceName: string) => {
       const i18nLanguageNamespaceBlob = new Blob(
-        [JSON.stringify(i18nJson[languageCode][languageNamespaceName], null, 2)],
+        [JSON.stringify(i18nJson[language][languageNamespaceName], null, 2)],
         { type: 'text/plain;charset=utf-8' }
       );
-      jsZip.folder(languageCode).file(`${languageNamespaceName}.json`, i18nLanguageNamespaceBlob);
+      jsZip.folder(language).file(`${languageNamespaceName}.json`, i18nLanguageNamespaceBlob);
     });
+
+    if(createDefaultExportFileType) {
+      const i18nNamespaceIndexBlob = new Blob(
+        [createNamespaceIndexJsString(namespaces)],
+        { type: 'text/plain;charset=utf-8' }
+      );
+      jsZip.folder(language).file(`index.${createDefaultExportFileType}`, i18nNamespaceIndexBlob);
+    }
   });
+
+  if(createDefaultExportFileType) {
+    const i18nLanguageIndexBlob = new Blob(
+      [createLanguageIndexJsString(languages)],
+      { type: 'text/plain;charset=utf-8' }
+    );
+    jsZip.file(`index.${createDefaultExportFileType}`, i18nLanguageIndexBlob);
+  }
+
   const i18nJsonZip = await jsZip.generateAsync({ type: 'blob' })
   saveAs(i18nJsonZip, `${zipName}.zip`);
 };
@@ -111,7 +154,11 @@ export const createTemplateI18nXlsx = () => {
   saveWorkBookXlsx(templateXlsxFilename, workBook);
 };
 
-export const convertI18XlsxToJsonDirectoryZip = (file: Blob) => {
+export const convertI18XlsxToJsonDirectoryZip = (
+  file: Blob, {
+    createDefaultExportFileType = undefined
+  } = {}
+) => {
   const outputJsonDirectoryName = `i18n_${(new Date().getTime())}`;
 
   const fileReader = new FileReader();
@@ -143,7 +190,7 @@ export const convertI18XlsxToJsonDirectoryZip = (file: Blob) => {
         })
       });
     });
-    await saveI18nJsonZip(outputJsonDirectoryName, i18nJson);
+    await saveI18nJsonZip(outputJsonDirectoryName, i18nJson, { createDefaultExportFileType });
   };
 };
 
