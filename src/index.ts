@@ -4,38 +4,45 @@ import { saveAs } from 'file-saver-es';
 import { templateCommonJsonArray, templatePageJsonArray } from '@/assets/template';
 import { COLUMN_NAME } from '@/consts/code';
 
-interface JsZipFile {
-  name: string;
-  dir: boolean;
-  async: (type: string) => Promise<any>
-}
-interface JsZipFiles {
-  files: JsZipFile[];
-}
-interface GroupifiedJsZipFiles {
-  files: JsZipFile[];
-  directories: JsZipFile[];
-}
+import type {
+  JsZipFile, JsZipFiles, GroupifiedJsZipFiles,
+  I18nLanguageNamespaceJson, I18nLanguageJson, I18nJson,
+  WorkSheetJson, WorkSheetGroupJson
+} from '@/types';
 
-type I18nLanguageNamespaceJson = object;
-interface I18nLanguageJson {
-  [name: string]: I18nLanguageNamespaceJson
-}
-interface I18nJson {
-  [name: string]: I18nLanguageJson
-}
+// Utilities
 
-type WorkSheetJson = object[];
-interface WorkSheetGroupJson {
-  [name: string]: WorkSheetJson;
+const getByteSize = (targetString: string) => {
+  const str: string = targetString.toString();
+  let byteSize: number = 0;
+  let char: number;
+
+  for (let i = 0; !isNaN(str.charCodeAt(i)); i++) {
+    char = str.charCodeAt(i);
+
+    /*
+    if (char >> 11) {
+      byteSize += 3;
+    }
+    */
+
+    if (char >> 7) {
+      byteSize += 2;
+    }
+    else {
+      byteSize += 1;
+    }
+  }
+
+  return byteSize;
 }
 
 // https://eblo.tistory.com/84
 // https://redstapler.co/sheetjs-tutorial-create-xlsx/
-function stringToArrayBuffer(s) { 
-  var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
-  var view = new Uint8Array(buf);  //create uint8array as viewer
-  for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+const stringToArrayBuffer = (s) => { 
+  const buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+  let view = new Uint8Array(buf);  //create uint8array as viewer
+  for (let i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
   return buf;    
 }
 
@@ -44,8 +51,8 @@ const saveI18nJsonZip = async (zipName: string, i18nJson: I18nJson) => {
   Object.keys(i18nJson).forEach((languageCode: string) => {
     jsZip.folder(languageCode);
     Object.keys(i18nJson[languageCode]).forEach((languageNamespaceName: string) => {
-      var i18nLanguageNamespaceBlob = new Blob(
-        [JSON.stringify(i18nJson[languageCode][languageNamespaceName])],
+      const i18nLanguageNamespaceBlob = new Blob(
+        [JSON.stringify(i18nJson[languageCode][languageNamespaceName], null, 2)],
         { type: 'text/plain;charset=utf-8' }
       );
       jsZip.folder(languageCode).file(`${languageNamespaceName}.json`, i18nLanguageNamespaceBlob);
@@ -55,21 +62,45 @@ const saveI18nJsonZip = async (zipName: string, i18nJson: I18nJson) => {
   saveAs(i18nJsonZip, `${zipName}.zip`);
 };
 
+// https://github.com/SheetJS/sheetjs/issues/1473#issuecomment-1291746676
+const autofitWorkSheet = (workSheet: XLSX.WorkSheet) => {
+  const [startLetter, endLetter] = workSheet['!ref']?.replace(/\d/, '').split(':')!;
+  let numRegexp = new RegExp(/\d+$/g);
+  let start = startLetter.charCodeAt(0), end = endLetter.charCodeAt(0) + 1, rows = +numRegexp.exec(endLetter)[0];
+  let ranges: number[] = [];
+  for(let i = start; i < end; i++) {
+    ranges.push(i);
+  }
+  let objectMaxLength = [];
+  ranges.forEach((c) => {
+    const cell = String.fromCharCode(c);
+    let maxCellLength = 0;
+    for(let y = 1; y <= rows; y++) {
+      let cellLength = getByteSize(workSheet[`${cell}${y}`].v) + 2;
+      if(cellLength > maxCellLength) {
+        maxCellLength = cellLength;
+      }
+    }
+    objectMaxLength.push({ width: maxCellLength });
+  });
+  workSheet['!cols'] = objectMaxLength;
+}
+
 const createNewWorkBook = () => {
   const workBook: XLSX.WorkBook = XLSX.utils.book_new();
   return workBook;
 };
 const addWorkSheetJsonToWorkbook = (workBook: XLSX.WorkBook, workSheetName: string, sheetJson: WorkSheetJson) => {
-  const newWorkSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(sheetJson); 
+  const newWorkSheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(sheetJson);
+  autofitWorkSheet(newWorkSheet);
   XLSX.utils.book_append_sheet(workBook, newWorkSheet, workSheetName);
 };
-
 const saveWorkBookXlsx = (filename: string, workBook: XLSX.WorkBook) => {
   const workBookOut = XLSX.write(workBook, { bookType: 'xlsx',  type: 'binary' });
   saveAs(new Blob([stringToArrayBuffer(workBookOut)], { type: 'application/octet-stream' }), `${filename}.xlsx`);
 };
 
-
+// Methods
 
 export const createTemplateI18nXlsx = () => {
   const templateXlsxFilename = `template_i18n_${(new Date().getTime())}`;
@@ -132,7 +163,7 @@ export const convertJsonDirectoryZipToI18Xlsx = async (file: Blob) => {
 
   const groupifiedZip = Object.values(zip.files).reduce((acc: GroupifiedJsZipFiles, file: JsZipFile) => {
     if(file.dir) acc.directories.push(file);
-    else acc.files.push(file);
+    else if(file.name.endsWith('.json')) acc.files.push(file);
     return acc;
   }, {
     files: [],
