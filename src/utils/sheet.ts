@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { templateCommonJsonArray, templatePageJsonArray } from '@/assets/template';
 import { getByteSize, stringToArrayBuffer } from './common';
-import { convertBlobToZip } from './file';
+import { convertBlobToArrayBuffer, convertArrayBufferToZip } from './file';
 import { getZipBuilder } from './zip';
 import type { GroupifiedZipFiles, ZipFiles, ZipFile } from './zip';
 
@@ -180,51 +180,39 @@ export const convertWorkbookJsonToXlsxBlob = async (workbookJson: WorkbookJson) 
   return xlsxBlob;
 };
 
-export const convertXlsxBlobToWorkbookJson = async (
-  blob: Blob,
+export const convertXlsxArrayBufferToWorkbookJson = async (
+  arrayBuffer: ArrayBuffer,
 ) => {
-  const promise: (() => Promise<WorkbookJson>) = () => new Promise((resolve, reject) => {
-    try {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(blob);
-      fileReader.onload = async (event) => {
-        if (!event.target) reject(event);
-        const bufferArray = event.target.result;
-        const fileInformation = XLSX.read(bufferArray, {
-          type: 'buffer',
-          cellText: false,
-          cellDates: true,
-        });
-      
-        const worksheetNames = fileInformation.SheetNames;
-        const workbookJson = new WorkbookJson();
-        (worksheetNames ?? []).forEach((worksheetName: string) => {
-          const rawData = fileInformation.Sheets[worksheetName];
-          const data = XLSX.utils.sheet_to_json(rawData);
-      
-          data.map((record: object) => {
-            const key = record[DEFAULT_COLUMN_NAME.key];
-            if(!workbookJson.hasWorksheet(worksheetName)) {
-              workbookJson.setWorksheetJson(worksheetName, new WorksheetJson());
-            }
-            const worksheet = workbookJson.getWorksheetJson(worksheetName);
-            if(!worksheet.hasRecord(key)) worksheet.appendRecord(record);
-            else worksheet.updateRecord(key, record);
-          });
-        });
-        resolve(workbookJson);
-      };
-    } catch(error) {
-      reject(error);
-    }
+  const fileInformation = XLSX.read(arrayBuffer, {
+    type: 'buffer',
+    cellText: false,
+    cellDates: true,
   });
-  const result = await promise();
-  return result;
+
+  const worksheetNames = fileInformation.SheetNames;
+  const workbookJson = new WorkbookJson();
+  (worksheetNames ?? []).forEach((worksheetName: string) => {
+    const rawData = fileInformation.Sheets[worksheetName];
+    const data = XLSX.utils.sheet_to_json(rawData);
+
+    data.map((record: object) => {
+      const key = record[DEFAULT_COLUMN_NAME.key];
+      if(!workbookJson.hasWorksheet(worksheetName)) {
+        workbookJson.setWorksheetJson(worksheetName, new WorksheetJson());
+      }
+      const worksheet = workbookJson.getWorksheetJson(worksheetName);
+      if(!worksheet.hasRecord(key)) worksheet.appendRecord(record);
+      else worksheet.updateRecord(key, record);
+    });
+  });
+  return workbookJson;
 };
 
-export const convertWorkbookJsonToZipBlob = async (workbookJson: WorkbookJson, {
-  defaultExportFileType = undefined
-} = {}) => {
+export const convertWorkbookJsonToZipBlob = async (
+  workbookJson: WorkbookJson, {
+    defaultExportFileType = undefined
+  } = {}
+) => {
   const zipBuilder = getZipBuilder();
   const languageList = workbookJson.getWorksheetJsonFieldList({ includeKey: false });
   languageList.forEach((language: string) => {
@@ -262,7 +250,7 @@ export const convertWorkbookJsonToZipBlob = async (workbookJson: WorkbookJson, {
 };
 
 
-export const convertZipBlobToWorkbookJson = async (zipBlob: Blob) => {
+export const convertZipArrayBufferToWorkbookJson = async (arrayBuffer: ArrayBuffer) => {
   const getLanguageAndNamespaceFromFilename = (zipFile: ZipFile) => {
     const splitedFilename = zipFile.name.replace(/\.json$/i, '').split('/');
     return {
@@ -271,7 +259,7 @@ export const convertZipBlobToWorkbookJson = async (zipBlob: Blob) => {
     };
   };
 
-  const zip = await convertBlobToZip(zipBlob) as ZipFiles;
+  const zip = await convertArrayBufferToZip(arrayBuffer) as ZipFiles;
   const workBookJson = new WorkbookJson();
 
   const groupifiedZip = Object.values(zip.files).reduce((acc: GroupifiedZipFiles, file: ZipFile) => {
