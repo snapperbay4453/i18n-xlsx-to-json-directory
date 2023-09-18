@@ -1,4 +1,4 @@
-import type { Column } from '@/consts/code';
+import type { Column } from '@/consts/column';
 
 export const templateCommonJsonArray: Column[] = [
   {

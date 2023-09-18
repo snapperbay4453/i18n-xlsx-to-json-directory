@@ -8,27 +8,27 @@ The directory structure is tailored to the i18next library.
 
 ```javascript
 import {
-  createTemplateI18nXlsx,
-  convertI18XlsxToJsonDirectoryZip,
-  convertJsonDirectoryZipToI18Xlsx,
-} from 'i18n-xlsx-to-json-directory';
+  createTemplateXlsx,
+  convertXlsxToZip,
+  convertZipToXlsx,
+} from 'i18n-xlsx-to-json-directory/browser';
 ```
 
-### createTemplateI18nXlsx
+### createTemplateXlsx()
 
 Create and download template .xlsx files.
 
-### convertI18XlsxToJsonDirectoryZip
+### convertXlsxToZip(file)
 
 Convert the .xlsx file to the json directory structure, then compress it to create and download the zip file.
 
-### convertJsonDirectoryZipToI18Xlsx
+### convertZipToXlsx(file, options)
 
 Analyze the .zip file, then create and download the .xlsx file.
 
 #### options
 
-createDefaultExportFileType: Create a default index script file to export each language and namespace. ('js' || 'ts' || undefined)
+defaultExportFileType: Create a default index script file to export each language and namespace. ('js' || 'ts' || undefined)
 
 
 ## Contributing

@@ -8,27 +8,27 @@
 
 ```javascript
 import {
-  createTemplateI18nXlsx,
-  convertI18XlsxToJsonDirectoryZip,
-  convertJsonDirectoryZipToI18Xlsx,
-} from 'i18n-xlsx-to-json-directory';
+  createTemplateXlsx,
+  convertXlsxToZip,
+  convertZipToXlsx,
+} from 'i18n-xlsx-to-json-directory/browser';
 ```
 
-### createTemplateI18nXlsx
+### createTemplateXlsx()
 
 템플릿 .xlsx 파일을 생성 및 다운로드합니다.
 
-### convertI18XlsxToJsonDirectoryZip
+### convertXlsxToZip(file)
 
 .xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 .zip 파일을 생성 및 다운로드합니다.
 
-### convertJsonDirectoryZipToI18Xlsx(file, options)
+### convertZipToXlsx(file, options)
 
 .zip 파일을 분석한 후, .xlsx 파일을 생성 및 다운로드합니다.
 
 #### options
 
-createDefaultExportFileType: 각 언어 및 네임스페이스를 export하는 기본 index 스크립트 파일을 생성합니다. ('js' || 'ts' || undefined)
+defaultExportFileType: 각 언어 및 네임스페이스를 export하는 기본 index 스크립트 파일을 생성합니다. ('js' || 'ts' || undefined)
 
 ## 기여
 

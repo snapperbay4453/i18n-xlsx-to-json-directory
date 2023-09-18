@@ -15,9 +15,9 @@ const extensions = ['.js', '.ts'];
 
 export default [
   {
-    input: './src/index.ts',
+    input: './src/browser.ts',
     output: {
-      file: './dist/index.js',
+      file: './dist/browser.js',
       format: 'es',
     },
     plugins: [
@@ -32,10 +32,40 @@ export default [
     ],
   },
   {
-    input: './src/index.ts',
+    input: './src/node.ts',
+    output: {
+      file: './dist/node.js',
+      format: 'cjs',
+    },
+    plugins: [
+      alias({
+        entries: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+      }),
+      resolve({ extensions }),
+      commonjs(),
+      eslint(),
+      typescript(),
+      terser(),
+    ],
+  },
+  {
+    input: './src/browser.ts',
     output: [{
-      file: './dist/index.d.ts',
+      file: './dist/browser.d.ts',
       format: 'es',
+    }],
+    plugins: [
+      alias({
+        entries: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+      }),
+      dts(),
+    ],
+  },
+  {
+    input: './src/node.ts',
+    output: [{
+      file: './dist/node.d.ts',
+      format: 'cjs',
     }],
     plugins: [
       alias({

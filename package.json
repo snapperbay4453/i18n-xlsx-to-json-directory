@@ -14,7 +14,10 @@
 		"email": "snapperbay4453@gmail.com",
 		"url": "https://snapperbay4453.github.io"
 	},
-	"main": "./dist/index.js",
+  "exports": {
+    "./browser": "./dist/browser.js",
+    "./node": "./dist/node.js"
+  },
 	"bugs": {
 		"url": "https://github.com/snapperbay4453/i18n-xlsx-to-json-directory/issues"
 	},
