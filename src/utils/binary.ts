@@ -1,4 +1,3 @@
-import { saveAs } from 'file-saver-es';
 import { getZipBuilder } from './zip';
 
 export const convertBlobToArrayBuffer = async (
@@ -19,6 +18,11 @@ export const convertBlobToArrayBuffer = async (
   });
   const result = await promise();
   return result;
+};
+export const convertArrayBufferToBlob = async (
+  arrayBuffer: ArrayBuffer
+) => {
+  return new Blob([arrayBuffer], { type: 'application/octet-stream' });
 };
 
 
@@ -53,7 +57,3 @@ export const convertBlobToXlsxBlob = async (
   return result;
 };
 */
-
-export const downloadFileViaBrowser = async (blob: Blob, blobFilename: string) => {
-  await saveAs(blob, blobFilename);
-};

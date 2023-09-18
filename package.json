@@ -26,6 +26,7 @@
 		"watch": "rimraf --glob 'dist/*' && rollup -cw"
 	},
 	"dependencies": {
+		"commander": "^11.0.0",
 		"file-saver-es": "^2.0.5",
 		"jszip": "^3.10.1",
 		"xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz"

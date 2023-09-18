@@ -35,7 +35,7 @@ export default [
     input: './src/node.ts',
     output: {
       file: './dist/node.js',
-      format: 'cjs',
+      format: 'es',
     },
     plugins: [
       alias({
@@ -65,7 +65,7 @@ export default [
     input: './src/node.ts',
     output: [{
       file: './dist/node.d.ts',
-      format: 'cjs',
+      format: 'es',
     }],
     plugins: [
       alias({

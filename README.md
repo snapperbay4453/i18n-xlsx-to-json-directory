@@ -16,15 +16,15 @@ import {
 
 ### createTemplateXlsx()
 
-Create and download template .xlsx files.
+Create and download template xlsx file.
 
 ### convertXlsxToZip(file)
 
-Convert the .xlsx file to the json directory structure, then compress it to create and download the zip file.
+Convert the xlsx file to the json directory structure, then compress it to create and download the zip file.
 
 ### convertZipToXlsx(file, options)
 
-Analyze the .zip file, then create and download the .xlsx file.
+Analyze the zip file, then create and download the xlsx file.
 
 #### options
 

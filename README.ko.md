@@ -16,15 +16,15 @@ import {
 
 ### createTemplateXlsx()
 
-템플릿 .xlsx 파일을 생성 및 다운로드합니다.
+템플릿 xlsx 파일을 생성 및 다운로드합니다.
 
 ### convertXlsxToZip(file)
 
-.xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 .zip 파일을 생성 및 다운로드합니다.
+xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
 
 ### convertZipToXlsx(file, options)
 
-.zip 파일을 분석한 후, .xlsx 파일을 생성 및 다운로드합니다.
+.zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
 
 #### options
 

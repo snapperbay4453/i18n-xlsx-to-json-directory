@@ -1,7 +1,7 @@
 import * as XLSX from 'xlsx';
 import { templateCommonJsonArray, templatePageJsonArray } from '@/assets/template';
 import { getByteSize, stringToArrayBuffer } from './common';
-import { convertBlobToArrayBuffer, convertArrayBufferToZip } from './file';
+import { convertArrayBufferToZip } from './binary';
 import { getZipBuilder } from './zip';
 import type { GroupifiedZipFiles, ZipFiles, ZipFile } from './zip';
 
@@ -146,14 +146,14 @@ export const addWorksheetToWorkbook = (workbook: Workbook, worksheet: Worksheet,
   XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
 };
 
-export const convertWorkbookToXlsxBlob = (workbook: Workbook) => {
+export const convertWorkbookToXlsxArrayBuffer = (workbook: Workbook) => {
   const workbookOutput = XLSX.write(workbook, { bookType: 'xlsx',  type: 'binary' });
-  return new Blob([stringToArrayBuffer(workbookOutput)], { type: 'application/octet-stream' });
+  return stringToArrayBuffer(workbookOutput);
 };
 
 
 
-export const createTemplateXlsxBlob = async () => {
+export const createTemplateXlsxArrayBuffer = async () => {
   const workbook: Workbook = createEmptyWorkbook();
 
   const templateCommonWorksheet = createWorksheet(templateCommonJsonArray);
@@ -162,11 +162,11 @@ export const createTemplateXlsxBlob = async () => {
   addWorksheetToWorkbook(workbook, templateCommonWorksheet, 'common');
   addWorksheetToWorkbook(workbook, templatePageWorksheet, 'page');
   
-  const xlsxBlob = convertWorkbookToXlsxBlob(workbook);
+  const xlsxBlob = convertWorkbookToXlsxArrayBuffer(workbook);
   return xlsxBlob;
 };
 
-export const convertWorkbookJsonToXlsxBlob = async (workbookJson: WorkbookJson) => {
+export const convertWorkbookJsonToXlsxArrayBuffer = async (workbookJson: WorkbookJson) => {
   const worksheetNameList = workbookJson.getWorksheetJsonNameList();
   const workbook: Workbook = createEmptyWorkbook();
 
@@ -176,8 +176,8 @@ export const convertWorkbookJsonToXlsxBlob = async (workbookJson: WorkbookJson) 
     addWorksheetToWorkbook(workbook, worksheet, worksheetName);
   }
 
-  const xlsxBlob = convertWorkbookToXlsxBlob(workbook);
-  return xlsxBlob;
+  const xlsxArrayBuffer = convertWorkbookToXlsxArrayBuffer(workbook);
+  return xlsxArrayBuffer;
 };
 
 export const convertXlsxArrayBufferToWorkbookJson = async (
@@ -188,7 +188,6 @@ export const convertXlsxArrayBufferToWorkbookJson = async (
     cellText: false,
     cellDates: true,
   });
-
   const worksheetNames = fileInformation.SheetNames;
   const workbookJson = new WorkbookJson();
   (worksheetNames ?? []).forEach((worksheetName: string) => {
@@ -208,7 +207,7 @@ export const convertXlsxArrayBufferToWorkbookJson = async (
   return workbookJson;
 };
 
-export const convertWorkbookJsonToZipBlob = async (
+export const convertWorkbookJsonToZipArrayBuffer = async (
   workbookJson: WorkbookJson, {
     defaultExportFileType = undefined
   } = {}
@@ -221,32 +220,23 @@ export const convertWorkbookJsonToZipBlob = async (
     const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
     worksheetJsonNameList.forEach((namespace: string) => {
       const worksheetJson = workbookJson.getWorksheetJson(namespace);
-      const worksheetBlob = new Blob(
-        [JSON.stringify(worksheetJson.getRecordList(), null, 2)],
-        { type: 'text/plain;charset=utf-8' }
-      );
-      zipBuilder.folder(language).file(`${namespace}.json`, worksheetBlob);
+      const worksheetArrayBuffer = JSON.stringify(worksheetJson.getRecordList(), null, 2);
+      zipBuilder.folder(language).file(`${namespace}.json`, worksheetArrayBuffer);
     });
 
     if(defaultExportFileType) {
-      const namespaceIndexBlob = new Blob(
-        [createNamespaceIndexJsString(worksheetJsonNameList)],
-        { type: 'text/plain;charset=utf-8' }
-      );
-      zipBuilder.folder(language).file(`index.${defaultExportFileType}`, namespaceIndexBlob);
+      const namespaceIndexArrayBuffer = createNamespaceIndexJsString(worksheetJsonNameList);
+      zipBuilder.folder(language).file(`index.${defaultExportFileType}`, namespaceIndexArrayBuffer);
     }
   });
 
   if(defaultExportFileType) {
-    const languageIndexBlob = new Blob(
-      [createLanguageIndexJsString(languageList)],
-      { type: 'text/plain;charset=utf-8' }
-    );
-    zipBuilder.file(`index.${defaultExportFileType}`, languageIndexBlob);
+    const languageIndexArrayBuffer = createLanguageIndexJsString(languageList);
+    zipBuilder.file(`index.${defaultExportFileType}`, languageIndexArrayBuffer);
   }
 
-  const zipBlob = await zipBuilder.generateAsync({ type: 'blob' });
-  return zipBlob;
+  const zipArrayBuffer = await zipBuilder.generateAsync({ type: 'arraybuffer' });
+  return zipArrayBuffer;
 };
 
 
