@@ -1,6 +1,6 @@
 {
 	"name": "i18n-xlsx-to-json-directory",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "Library that converts .xlsx file into json directory structure used by i18next.",
 	"type": "module",
 	"private": false,
