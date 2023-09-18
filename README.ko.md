@@ -34,7 +34,7 @@ defaultExportFileType: 각 언어 및 네임스페이스를 export하는 기본 
 
 풀 리퀘스트는 언제나 환영입니다. 주요 변경 사항에 대해서는 먼저 이슈를 열어 변경 사항을 논의해주세요.
 
-테스트를 적절하게 업데이트해 주시기 바랍니다.
+테스트를 적절하게 업데이트 해주시기 바랍니다.
 
 ## 라이선스
 
@@ -43,7 +43,6 @@ defaultExportFileType: 각 언어 및 네임스페이스를 export하는 기본 
 ## 참조
 
 * [https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html](https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html)
-* [https://git.sheetjs.com/sheetjs/sheetjs/src/commit/9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup](https://git.sheetjs.com/sheetjs/sheetjs/src/commit/
-* [https://chanyeong.com/blog/post/54](https://chanyeong.com/blog/post/54)9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup)
+* [https://chanyeong.com/blog/post/54](https://chanyeong.com/blog/post/54)
 * [https://eblo.tistory.com/84](https://eblo.tistory.com/84)
 * [https://redstapler.co/sheetjs-tutorial-create-xlsx/](https://redstapler.co/sheetjs-tutorial-create-xlsx/)

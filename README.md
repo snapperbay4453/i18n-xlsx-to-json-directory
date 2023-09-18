@@ -45,7 +45,6 @@ Please make sure to update tests as appropriate.
 ## Reference
 
 * [https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html](https://wormwlrm.github.io/2021/11/07/Rollup-React-TypeScript.html)
-* [https://git.sheetjs.com/sheetjs/sheetjs/src/commit/9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup](https://git.sheetjs.com/sheetjs/sheetjs/src/commit/
-* [https://chanyeong.com/blog/post/54](https://chanyeong.com/blog/post/54)9add78a29073eaafc2e83c6522ff79219ee7053f/demos/rollup)
+* [https://chanyeong.com/blog/post/54](https://chanyeong.com/blog/post/54)
 * [https://eblo.tistory.com/84](https://eblo.tistory.com/84)
 * [https://redstapler.co/sheetjs-tutorial-create-xlsx/](https://redstapler.co/sheetjs-tutorial-create-xlsx/)
