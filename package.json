@@ -22,9 +22,8 @@
 		"url": "https://github.com/snapperbay4453/i18n-xlsx-to-json-directory/issues"
 	},
 	"scripts": {
-		"build": "rollup -c",
-		"watch": "rollup -cw",
-		"prepare": "rimraf --glob 'dist/*' && npm run build"
+		"build": "rimraf --glob 'dist/*' && rollup -c",
+		"watch": "rimraf --glob 'dist/*' && rollup -cw"
 	},
 	"dependencies": {
 		"file-saver-es": "^2.0.5",

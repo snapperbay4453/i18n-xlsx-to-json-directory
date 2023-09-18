@@ -24,7 +24,7 @@ export default [
       alias({
         entries: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
       }),
-      resolve({ browser:true, extensions }),
+      resolve({ browser: true, extensions }),
       commonjs(),
       eslint(),
       typescript(),
