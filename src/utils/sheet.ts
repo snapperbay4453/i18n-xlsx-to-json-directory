@@ -8,6 +8,9 @@ import { convertArrayBufferToZip } from './binary';
 import { getZipBuilder } from './zip';
 import type { GroupifiedZipFiles, ZipFiles, ZipFile } from './zip';
 
+/**
+ * Creates index.js content of language directory.
+ */
 const createLanguageIndexJsString = (languageList: string[]) => {
   let lines = [];
   languageList.forEach((language: string) => lines.push(`import ${language} from './${language}';`));
@@ -15,6 +18,10 @@ const createLanguageIndexJsString = (languageList: string[]) => {
   lines.push(`export { ${languageList.map((language: string) => `${language}`).join(', ')} };`);
   return lines.join('\n');
 }
+
+/**
+ * Creates index.js content of namespace directory.
+ */
 const createNamespaceIndexJsString = (namespaceList: string[]) => {
   let lines = [];
   namespaceList.forEach((namespace: string) => lines.push(`import ${namespace} from './${namespace}.json';`));
@@ -23,8 +30,11 @@ const createNamespaceIndexJsString = (namespaceList: string[]) => {
   return lines.join('\n');
 }
 
-// https://github.com/SheetJS/sheetjs/issues/1473#issuecomment-1291746676
+/**
+ * Calculates worksheet column width based on worksheet data.
+ */
 export const autoFitWorksheetColumnWidth = (worksheet: Worksheet) => {
+  // https://github.com/SheetJS/sheetjs/issues/1473#issuecomment-1291746676
   const [startLetter, endLetter] = worksheet['!ref']?.replace(/\d/, '').split(':')!;
   let numRegexp = new RegExp(/\d+$/g);
   let start = startLetter.charCodeAt(0), end = endLetter.charCodeAt(0) + 1, rows = +numRegexp.exec(endLetter)[0];
@@ -53,9 +63,11 @@ export const autoFitWorksheetColumnWidth = (worksheet: Worksheet) => {
 export const createEmptyWorkbook = () => {
   return XLSX.utils.book_new();
 };
-export const createWorksheet = (worksheetJson) => {
-  return XLSX.utils.json_to_sheet(worksheetJson);
+
+export const createWorksheet = (json: object[]) => {
+  return XLSX.utils.json_to_sheet(json);
 };
+
 export const addWorksheetToWorkbook = (workbook: Workbook, worksheet: Worksheet, worksheetName: string) => {
   autoFitWorksheetColumnWidth(worksheet);
   XLSX.utils.book_append_sheet(workbook, worksheet, worksheetName);
@@ -65,8 +77,6 @@ export const convertWorkbookToXlsxArrayBuffer = (workbook: Workbook) => {
   const workbookOutput = XLSX.write(workbook, { bookType: 'xlsx',  type: 'binary' });
   return stringToArrayBuffer(workbookOutput);
 };
-
-
 
 export const createTemplateXlsxArrayBuffer = async () => {
   const workbook: Workbook = createEmptyWorkbook();
@@ -122,6 +132,9 @@ export const convertXlsxArrayBufferToWorkbookJson = async (
   return workbookJson;
 };
 
+/**
+ * Returns iterator of WorksheetJson objects from WorkbookJson object.
+ */
 export async function* iterateWorksheet(workbookJson: WorkbookJson) {
   const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
   for(const worksheetJsonName of worksheetJsonNameList) {

@@ -11,7 +11,7 @@ import {
   writeFileViaNode,
 } from '@/utils/nodeFileIo';
 
-const createTemplateXlsx = async (destination: string) => {
+export const createTemplateXlsx = async (destination: string) => {
   const xlsxArrayBuffer = await createTemplateXlsxArrayBuffer();
   await writeFileViaNode(destination, xlsxArrayBuffer);
   return xlsxArrayBuffer;

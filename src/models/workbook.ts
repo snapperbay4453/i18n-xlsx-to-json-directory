@@ -1,8 +1,15 @@
 import * as XLSX from 'xlsx';
 import { WorksheetJson } from './worksheet';
 
+/**
+ * Class that wraps XLSX.WorkBook.
+ */
 export type Workbook = XLSX.WorkBook;
 
+/**
+ * Keeps WorksheetJson classes
+ * and provides utility methods.
+ */
 export class WorkbookJson {
   constructor() {
     this.worksheetJsonMap = new Map();

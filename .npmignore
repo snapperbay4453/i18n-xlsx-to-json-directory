@@ -34,3 +34,7 @@ tsconfig.json
 # GIT
 .git
 .github
+
+# Doc
+doc
+docs

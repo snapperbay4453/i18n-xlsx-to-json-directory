@@ -7,16 +7,8 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"noEmit": true,
-		"allowJs": true,
 		"allowSyntheticDefaultImports": true,
-		"checkJs": true,
     "downlevelIteration": true,
-    "importHelpers": true,
-		"lib": [ 
-			"dom",
-			"esnext",
-			"webworker"
-		],
 		"paths": {
       "@/*": [ "src/*" ],
       "file-saver-es": [

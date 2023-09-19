@@ -1,8 +1,15 @@
 import * as XLSX from 'xlsx';
 import { DEFAULT_COLUMN_NAME } from '@/consts/column';
 
+/**
+ * Class that wraps XLSX.WorkSheet.
+ */
 export type Worksheet = XLSX.WorkSheet;
 
+/**
+ * Keeps spreadsheet row data
+ * and provides utility methods.
+ */
 export class WorksheetJson {
   constructor() {
     this.recordList = [];
