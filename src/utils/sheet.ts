@@ -1,97 +1,12 @@
 import * as XLSX from 'xlsx';
 import { templateCommonJsonArray, templatePageJsonArray } from '@/assets/template';
+import { Workbook, WorkbookJson } from '@/models/workbook';
+import { Worksheet, WorksheetJson } from '@/models/worksheet';
+import { DEFAULT_COLUMN_NAME } from '@/consts/column';
 import { getByteSize, stringToArrayBuffer } from './common';
 import { convertArrayBufferToZip } from './binary';
 import { getZipBuilder } from './zip';
 import type { GroupifiedZipFiles, ZipFiles, ZipFile } from './zip';
-
-export const DEFAULT_COLUMN_NAME = Object.freeze({
-  key: 'code'
-});
-
-type Workbook = XLSX.WorkBook;
-type Worksheet = XLSX.WorkSheet;
-
-export class WorksheetJson {
-  constructor() {
-    this.recordList = [];
-  }
-  recordList: object[];
-  getRecordKeyList() {
-    return this.recordList.map(record => record[DEFAULT_COLUMN_NAME.key]);
-  };
-  getFieldList({ includeKey = false } = {}) {
-    const columnSet = this.recordList.reduce((acc: Set<string>, record) => {
-      Object.keys(record).forEach(column => {
-        acc.add(column)
-      });
-      return acc;
-    }, new Set()) as Set<string>;
-
-    if(includeKey) return [...columnSet];
-    else return [...columnSet].filter(column => column !== DEFAULT_COLUMN_NAME.key);
-  };
-  findRecordIndex(key: string) {
-    return this.recordList.findIndex(record => record[DEFAULT_COLUMN_NAME.key] === key);
-  };
-  hasRecord(key: string) {
-    return this.recordList.findIndex(item => item[DEFAULT_COLUMN_NAME.key] === key) >= 0;
-  };
-  appendRecord(record: object) {
-    this.recordList.push(record);
-  };
-  getRecord(key: string) {
-    const recordIndex = this.findRecordIndex(key);
-    if(recordIndex < 0) undefined;
-    else return this.recordList[recordIndex];
-  };
-  getRecordList() {
-    return this.recordList;
-  };
-  setRecord(key: string, record: object) {
-    const recordIndex = this.findRecordIndex(key);
-    if(recordIndex < 0) this.appendRecord(record);
-    else this.recordList[recordIndex] = record;
-  };
-  updateRecord(key: string, record: object) {
-    const recordIndex = this.findRecordIndex(key);
-    if(recordIndex < 0) this.appendRecord(record);
-    else this.recordList[recordIndex] = {
-      ...this.recordList[recordIndex],
-      ...record,
-    };
-  };
-}
-
-export class WorkbookJson {
-  constructor() {
-    this.worksheetJsonMap = new Map();
-  }
-  worksheetJsonMap: Map<string, WorksheetJson>;
-  getWorksheetJsonNameList() {
-    return [...this.worksheetJsonMap.keys()];
-  }
-  getWorksheetJsonFieldList({ includeKey = false } = {}) {
-    const fieldSet = [...this.worksheetJsonMap.values()]
-    .map(worksheetJson => worksheetJson.getFieldList({ includeKey }))
-    .reduce((acc: Set<string>, fieldList) => {
-      fieldList.forEach(field => {
-        acc.add(field);
-      });
-      return acc;
-    }, new Set()) as Set<string>;
-    return [...fieldSet];
-  };
-  hasWorksheet(name: string) {
-    return this.worksheetJsonMap.has(name);
-  };
-  getWorksheetJson(name: string) {
-    return this.worksheetJsonMap.get(name);
-  };
-  setWorksheetJson(name: string, worksheetJson: WorksheetJson) {
-    this.worksheetJsonMap.set(name, worksheetJson);
-  };
-}
 
 const createLanguageIndexJsString = (languageList: string[]) => {
   let lines = [];
@@ -162,8 +77,8 @@ export const createTemplateXlsxArrayBuffer = async () => {
   addWorksheetToWorkbook(workbook, templateCommonWorksheet, 'common');
   addWorksheetToWorkbook(workbook, templatePageWorksheet, 'page');
   
-  const xlsxBlob = convertWorkbookToXlsxArrayBuffer(workbook);
-  return xlsxBlob;
+  const xlsxArrayBuffer = convertWorkbookToXlsxArrayBuffer(workbook);
+  return xlsxArrayBuffer;
 };
 
 export const convertWorkbookJsonToXlsxArrayBuffer = async (workbookJson: WorkbookJson) => {
@@ -293,7 +208,6 @@ export const convertWorkbookJsonToArrayBufferMap = async (
   return arrayBufferMap;
 };
 
-
 export const convertZipArrayBufferToWorkbookJson = async (arrayBuffer: ArrayBuffer) => {
   const getLanguageAndNamespaceFromFilename = (zipFile: ZipFile) => {
     const splitedFilename = zipFile.name.replace(/\.json$/i, '').split('/');
@@ -304,7 +218,7 @@ export const convertZipArrayBufferToWorkbookJson = async (arrayBuffer: ArrayBuff
   };
 
   const zip = await convertArrayBufferToZip(arrayBuffer) as ZipFiles;
-  const workBookJson = new WorkbookJson();
+  const workbookJson = new WorkbookJson();
 
   const groupifiedZip = Object.values(zip.files).reduce((acc: GroupifiedZipFiles, file: ZipFile) => {
     if(file.dir) acc.directories.push(file);
@@ -317,16 +231,16 @@ export const convertZipArrayBufferToWorkbookJson = async (arrayBuffer: ArrayBuff
 
   for await (const zipFile of groupifiedZip.files) {
     const { namespace } = getLanguageAndNamespaceFromFilename(zipFile);
-    if(!workBookJson.hasWorksheet(namespace)) workBookJson.setWorksheetJson(namespace, new WorksheetJson());
+    if(!workbookJson.hasWorksheet(namespace)) workbookJson.setWorksheetJson(namespace, new WorksheetJson());
 
     const zipFileData = await zipFile.async('string');
     var parsedZipFileData = JSON.parse(zipFileData);
     
     Object.values(parsedZipFileData).forEach((record: object) => {
-      const worksheetJson = workBookJson.getWorksheetJson(namespace);
+      const worksheetJson = workbookJson.getWorksheetJson(namespace);
       worksheetJson.updateRecord(record[DEFAULT_COLUMN_NAME.key], record);
     });
   }
 
-  return workBookJson;
+  return workbookJson;
 };
