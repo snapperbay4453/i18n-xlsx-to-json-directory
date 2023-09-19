@@ -62,6 +62,7 @@ export class WorksheetJson {
     };
   };
 }
+
 export class WorkbookJson {
   constructor() {
     this.worksheetJsonMap = new Map();
@@ -133,7 +134,6 @@ export const autoFitWorksheetColumnWidth = (worksheet: Worksheet) => {
   
   worksheet['!cols'] = objectMaxLength;
 }
-
 
 export const createEmptyWorkbook = () => {
   return XLSX.utils.book_new();
@@ -207,28 +207,43 @@ export const convertXlsxArrayBufferToWorkbookJson = async (
   return workbookJson;
 };
 
+export async function* iterateWorksheet(workbookJson: WorkbookJson) {
+  const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
+  for(const worksheetJsonName of worksheetJsonNameList) {
+    const worksheetJson = workbookJson.getWorksheetJson(worksheetJsonName);
+    const worksheetArrayBuffer = JSON.stringify(worksheetJson.getRecordList(), null, 2);
+    yield {
+      name: worksheetJsonName,
+      arrayBuffer: worksheetArrayBuffer,
+    };
+  };
+};
+
 export const convertWorkbookJsonToZipArrayBuffer = async (
   workbookJson: WorkbookJson, {
-    defaultExportFileType = undefined
+    defaultExportFileType = undefined,
   } = {}
 ) => {
   const zipBuilder = getZipBuilder();
   const languageList = workbookJson.getWorksheetJsonFieldList({ includeKey: false });
-  languageList.forEach((language: string) => {
+
+  for(const language of languageList) {
     zipBuilder.folder(language);
 
     const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
-    worksheetJsonNameList.forEach((namespace: string) => {
-      const worksheetJson = workbookJson.getWorksheetJson(namespace);
-      const worksheetArrayBuffer = JSON.stringify(worksheetJson.getRecordList(), null, 2);
-      zipBuilder.folder(language).file(`${namespace}.json`, worksheetArrayBuffer);
-    });
+
+    for await (const worksheetArrayBufferIterator of iterateWorksheet(workbookJson)) {
+      zipBuilder.folder(language).file(
+        `${worksheetArrayBufferIterator.name}.json`,
+        worksheetArrayBufferIterator.arrayBuffer
+      );
+    }
 
     if(defaultExportFileType) {
       const namespaceIndexArrayBuffer = createNamespaceIndexJsString(worksheetJsonNameList);
       zipBuilder.folder(language).file(`index.${defaultExportFileType}`, namespaceIndexArrayBuffer);
     }
-  });
+  };
 
   if(defaultExportFileType) {
     const languageIndexArrayBuffer = createLanguageIndexJsString(languageList);
@@ -237,6 +252,45 @@ export const convertWorkbookJsonToZipArrayBuffer = async (
 
   const zipArrayBuffer = await zipBuilder.generateAsync({ type: 'arraybuffer' });
   return zipArrayBuffer;
+};
+
+export const convertWorkbookJsonToArrayBufferMap = async (
+  workbookJson: WorkbookJson, {
+    defaultExportFileType = undefined,
+  } = {}
+) => {
+  const arrayBufferMap = new Map();
+  const languageList = workbookJson.getWorksheetJsonFieldList({ includeKey: false });
+
+  for(const language of languageList) {
+
+    const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
+
+    for await (const worksheetArrayBufferIterator of iterateWorksheet(workbookJson)) {
+      arrayBufferMap.set(
+        `/${language}/${worksheetArrayBufferIterator.name}.json`,
+        worksheetArrayBufferIterator.arrayBuffer
+      );
+    }
+
+    if(defaultExportFileType) {
+      const namespaceIndexArrayBuffer = createNamespaceIndexJsString(worksheetJsonNameList);
+      arrayBufferMap.set(
+        `/${language}/index.${defaultExportFileType}`,
+        namespaceIndexArrayBuffer
+      );
+    }
+  };
+
+  if(defaultExportFileType) {
+    const languageIndexArrayBuffer = createLanguageIndexJsString(languageList);
+    arrayBufferMap.set(
+      `/index.${defaultExportFileType}`,
+      languageIndexArrayBuffer
+    );
+  }
+
+  return arrayBufferMap;
 };
 
 

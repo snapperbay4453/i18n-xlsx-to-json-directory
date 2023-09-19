@@ -36,13 +36,14 @@ defaultExportFileType: Create a default index script file to export each languag
 
 ## Usage in Node Environment
 
-Please add the script below to package.json.
+Please add the example script below to package.json.
 
 ```json
 {
   "scripts": {
     "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx",
-    "xlsx-to-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type ts",
+    "xlsx-to-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
+    "xlsx-to-directory": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract",
     "zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx"
   },
 }
@@ -69,6 +70,8 @@ Convert the xlsx file to the json directory structure, then compress it to creat
 -d, --destination: Path where the converted file is stored.
 
 --export-file-type: Create a default index script file to export each language and namespace. ('js' || 'ts' || undefined)
+
+--auto-extract: Automatically decompresses converted zip files. You must specify a directory in the -d option.
 
 ### npm run zip-to-xlsx
 
