@@ -1,5 +1,12 @@
 # i18n-xlsx-to-json-directory
 
+![](https://img.shields.io/npm/v/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/npm/l/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/npm/dt/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/github/contributors/snapperbay4453/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/github/last-commit/snapperbay4453/i18n-xlsx-to-json-directory)
+
+
 Library that converts and downloads multilingual data stored in .xlsx files into a json directory structure. The directory structure is tailored to the i18next library.
 
 Supports browser and node environments.

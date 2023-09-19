@@ -1,5 +1,12 @@
 # i18n-xlsx-to-json-directory
 
+![](https://img.shields.io/npm/v/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/npm/l/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/npm/dt/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/github/contributors/snapperbay4453/i18n-xlsx-to-json-directory)
+![](https://img.shields.io/github/last-commit/snapperbay4453/i18n-xlsx-to-json-directory)
+
+
 .xlsx 파일에 저장된 다국어 데이터를 json 디렉토리 구조로 변환 및 다운로드하는 라이브러리입니다. 디렉토리 구조는 i18next 라이브러리에 맞추어져 있습니다.
 
 브라우저 및 Node 환경을 지원합니다.
