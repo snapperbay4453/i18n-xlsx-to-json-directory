@@ -30,6 +30,7 @@ rollup.config.js
 rollup.config.json
 rollup.config.mjs
 tsconfig.json
+jest.config.js
 
 # GIT
 .git
