@@ -1,23 +1,21 @@
+import { Command } from 'commander';
+import { WorkbookJson } from '@/models/workbook';
 import {
-  createTemplateXlsxArrayBuffer,
+  convertArrayBufferMapToWorkbookJson,
   convertWorkbookJsonToArrayBufferMap,
   convertWorkbookJsonToXlsxArrayBuffer,
   convertWorkbookJsonToZipArrayBuffer,
   convertXlsxArrayBufferToWorkbookJson,
   convertZipArrayBufferToWorkbookJson,
-} from '@/utils/sheet';
+  createTemplateXlsxArrayBuffer,
+} from '@/services/sheet';
 import {
+  getDirectoryFileArrayBufferMap,
   readFileViaNode,
   writeFileViaNode,
 } from '@/utils/nodeFileIo';
 
-export const createTemplateXlsx = async (destination: string) => {
-  const xlsxArrayBuffer = await createTemplateXlsxArrayBuffer();
-  await writeFileViaNode(destination, xlsxArrayBuffer);
-  return xlsxArrayBuffer;
-};
-
-export const convertXlsxToZip = async (source: string, destination: string, {
+export const convertXlsxToJsonZip = async (source: string, destination: string, {
   autoExtract = false,
   defaultExportFileType = undefined,
 } = {}) => {
@@ -37,30 +35,37 @@ export const convertXlsxToZip = async (source: string, destination: string, {
   }
 };
 
-export const convertZipToXlsx = async (source: string, destination: string) => {
-  const arrayBuffer = await readFileViaNode(source);
-  const workbookJson = await convertZipArrayBufferToWorkbookJson(arrayBuffer);
+export const convertJsonZipToXlsx = async (source: string, destination: string, {
+  autoCompress = false,
+} = {}) => {
+  let workbookJson: WorkbookJson;
+  if(autoCompress) {
+    const arrayBufferMap = await getDirectoryFileArrayBufferMap(source);
+    workbookJson = await convertArrayBufferMapToWorkbookJson(arrayBufferMap);
+  } else {
+    const arrayBuffer = await readFileViaNode(source);
+    workbookJson = await convertZipArrayBufferToWorkbookJson(arrayBuffer);
+  }
+
   const xlsxArrayBuffer = await convertWorkbookJsonToXlsxArrayBuffer(workbookJson);
   await writeFileViaNode(destination, xlsxArrayBuffer);
   return xlsxArrayBuffer;
 };
 
-import { Command } from 'commander';
+export const createTemplateXlsx = async (destination: string) => {
+  const xlsxArrayBuffer = await createTemplateXlsxArrayBuffer();
+  await writeFileViaNode(destination, xlsxArrayBuffer);
+  return xlsxArrayBuffer;
+};
+
+
 const program = new Command();
 
 program.name('i18n-xlsx-to-json-directory')
   .description('Library that converts and downloads multilingual data stored in xlsx files into a json directory structure.')
   .version(process.env.npm_package_version)
 
-program.command('template-xlsx')
-  .description('Create and download template xlsx file.')
-  .option('-d, --destination <char>', 'Target path')
-  .action((options) => {
-    const destination = options.destination;
-    createTemplateXlsx(destination);
-  });
-
-program.command('xlsx-to-zip')
+program.command('xlsx-to-json-zip')
   .description('Convert the xlsx file to the json directory structure, then compress it to create and download the zip file.')
   .option('-s, --source <char>', 'Source path')
   .option('-d, --destination <char>', 'Target path')
@@ -71,20 +76,32 @@ program.command('xlsx-to-zip')
     const destination = options.destination;
     const autoExtract = options.autoExtract;
     const exportFileType = options.exportFileType ?? undefined;
-    convertXlsxToZip(source, destination, {
+    convertXlsxToJsonZip(source, destination, {
       autoExtract: autoExtract,
       defaultExportFileType: exportFileType,
     });
   });
 
-program.command('zip-to-xlsx')
+program.command('json-zip-to-xlsx')
   .description('Analyze the zip file, then create and download the xlsx file.')
   .option('-s, --source <char>', 'Source path')
   .option('-d, --destination <char>', 'Target path')
+  .option('--auto-compress', 'Auto-compress json zip file')
   .action((options) => {
     const source = options.source;
     const destination = options.destination;
-    convertZipToXlsx(source, destination);
+    const autoCompress = options.autoCompress;
+    convertJsonZipToXlsx(source, destination, {
+      autoCompress: autoCompress,
+    });
+  });
+
+program.command('template-xlsx')
+  .description('Create and download template xlsx file.')
+  .option('-d, --destination <char>', 'Target path')
+  .action((options) => {
+    const destination = options.destination;
+    createTemplateXlsx(destination);
   });
 
 program.parse();

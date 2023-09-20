@@ -23,11 +23,16 @@ export const getByteSize = (targetString: string) => {
   return byteSize;
 };
 
-// https://eblo.tistory.com/84
-// https://redstapler.co/sheetjs-tutorial-create-xlsx/
-export const stringToArrayBuffer = (s) => { 
-  const buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
+export const stringToArrayBuffer = (str: string) => {
+  // https://eblo.tistory.com/84
+  // https://redstapler.co/sheetjs-tutorial-create-xlsx/
+  const buf = new ArrayBuffer(str.length); //convert s to arrayBuffer
   let view = new Uint8Array(buf);  //create uint8array as viewer
-  for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
+  for (let i = 0; i < str.length; i++) view[i] = str.charCodeAt(i) & 0xFF; //convert to octet
   return buf;    
 };
+
+export const ArrayBufferToString = (arrayBuffer: ArrayBuffer) => {
+  var str = new TextDecoder().decode(arrayBuffer);
+  return str;  
+}

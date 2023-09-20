@@ -7,7 +7,7 @@
 ![](https://img.shields.io/github/last-commit/snapperbay4453/i18n-xlsx-to-json-directory)
 
 
-.xlsx 파일에 저장된 다국어 데이터를 json 디렉토리 구조로 변환 및 다운로드하는 라이브러리입니다. 디렉토리 구조는 i18next 라이브러리에 맞추어져 있습니다.
+xlsx 파일에 저장된 다국어 데이터를 json 디렉토리 구조로 변환 및 다운로드하는 라이브러리입니다. 디렉토리 구조는 i18next 라이브러리에 맞추어져 있습니다.
 
 브라우저 및 Node 환경을 지원합니다.
 
@@ -18,23 +18,23 @@
 
 ```javascript
 import {
+  convertXlsxToJsonZip,
+  convertJsonZipToXlsx,
   createTemplateXlsx,
-  convertXlsxToZip,
-  convertZipToXlsx,
 } from 'i18n-xlsx-to-json-directory/browser';
 ```
+
+### convertXlsxJsonToZip(file)
+
+xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
+
+### convertJsonZipToXlsx(file, options)
+
+zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
 
 ### createTemplateXlsx()
 
 템플릿 xlsx 파일을 생성 및 다운로드합니다.
-
-### convertXlsxToZip(file)
-
-xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
-
-### convertZipToXlsx(file, options)
-
-.zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
 
 #### options
 
@@ -48,25 +48,16 @@ package.json에 아래 예시 스크립트를 추가해주세요.
 ```json
 {
   "scripts": {
-    "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx",
-    "xlsx-to-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
-    "xlsx-to-directory": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract",
-    "zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx"
+    "xlsx-to-json-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
+    "xlsx-to-json-directory": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract",
+    "json-zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx",
+    "json-directory-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n -d ./i18n.xlsx --auto-compress",
+    "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx"
   },
 }
 ```
 
-### npm run template-xlsx
-
-템플릿 xlsx 파일을 생성 및 저장합니다.
-
-#### options
-
--s, --source: 변환할 파일을 불러올 경로입니다.
-
--d, --destination: 변환된 파일이 저장될 경로입니다.
-
-### npm run xlsx-to-zip
+### npm run xlsx-to-json-zip
 
 xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
 
@@ -80,9 +71,21 @@ xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zi
 
 --auto-extract: 변환된 zip 파일을 자동으로 압축 해제합니다. -d 옵션에 디렉토리를 지정해야 합니다.
 
-### npm run zip-to-xlsx
+### npm run json-zip-to-xlsx
 
 .zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
+
+#### options
+
+-s, --source: 변환할 파일을 불러올 경로입니다.
+
+-d, --destination: 변환된 파일이 저장될 경로입니다.
+
+--auto-compress: 선택한 디렉터리를 자동으로 압축한 후 변환합니다. -d 옵션에 디렉토리를 지정해야 합니다.
+
+### npm run template-xlsx
+
+템플릿 xlsx 파일을 생성 및 저장합니다.
 
 #### options
 

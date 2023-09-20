@@ -1,5 +1,3 @@
-type ValueOf<T> = T[keyof T];
-
 export type Column = {
   [key: string]: string;
 };

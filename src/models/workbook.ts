@@ -28,14 +28,14 @@ export class WorkbookJson {
       return acc;
     }, new Set()) as Set<string>;
     return [...fieldSet];
-  };
+  }
   hasWorksheet(name: string) {
     return this.worksheetJsonMap.has(name);
-  };
+  }
   getWorksheetJson(name: string) {
     return this.worksheetJsonMap.get(name);
-  };
+  }
   setWorksheetJson(name: string, worksheetJson: WorksheetJson) {
     this.worksheetJsonMap.set(name, worksheetJson);
-  };
+  }
 }

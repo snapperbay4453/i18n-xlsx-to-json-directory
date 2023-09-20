@@ -7,7 +7,7 @@
 ![](https://img.shields.io/github/last-commit/snapperbay4453/i18n-xlsx-to-json-directory)
 
 
-Library that converts and downloads multilingual data stored in .xlsx files into a json directory structure. The directory structure is tailored to the i18next library.
+Library that converts and downloads multilingual data stored in xlsx files into a json directory structure. The directory structure is tailored to the i18next library.
 
 Supports browser and node environments.
 
@@ -18,27 +18,27 @@ Import the library into the script file as shown below.
 
 ```javascript
 import {
+  convertXlsxToJsonZip,
+  convertJsonZipToXlsx,
   createTemplateXlsx,
-  convertXlsxToZip,
-  convertZipToXlsx,
 } from 'i18n-xlsx-to-json-directory/browser';
 ```
 
-### createTemplateXlsx()
-
-Create and download template xlsx file.
-
-### convertXlsxToZip(file)
+### convertXlsxToJsonZip(file)
 
 Convert the xlsx file to the json directory structure, then compress it to create and download the zip file.
 
-### convertZipToXlsx(file, options)
+### convertJsonZipToXlsx(file, options)
 
 Analyze the zip file, then create and download the xlsx file.
 
 #### options
 
 defaultExportFileType: Create a default index script file to export each language and namespace. ('js' || 'ts' || undefined)
+
+### createTemplateXlsx()
+
+Create and download template xlsx file.
 
 
 ## Usage in Node Environment
@@ -48,25 +48,15 @@ Please add the example script below to package.json.
 ```json
 {
   "scripts": {
-    "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx",
-    "xlsx-to-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
+    "xlsx-to-json-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
     "xlsx-to-directory": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract",
-    "zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx"
+    "json-zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx",
+    "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx"
   },
 }
 ```
 
-### npm run template-xlsx
-
-Create and download template xlsx file.
-
-#### options
-
--s, --source: Path to recall files to convert.
-
--d, --destination: Path where the converted file is stored.
-
-### npm run xlsx-to-zip
+### npm run xlsx-to-json-zip
 
 Convert the xlsx file to the json directory structure, then compress it to create and download the zip file.
 
@@ -80,9 +70,21 @@ Convert the xlsx file to the json directory structure, then compress it to creat
 
 --auto-extract: Automatically decompresses converted zip files. You must specify a directory in the -d option.
 
-### npm run zip-to-xlsx
+### npm run json-zip-to-xlsx
 
 Analyze the zip file, then create and download the xlsx file.
+
+#### options
+
+-s, --source: Path to recall files to convert.
+
+-d, --destination: Path where the converted file is stored.
+
+--auto-compress: Automatically compresses and converts the selected directory. You must specify a directory in the -d option.
+
+### npm run template-xlsx
+
+Create and download template xlsx file.
 
 #### options
 

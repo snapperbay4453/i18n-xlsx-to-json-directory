@@ -1,4 +1,8 @@
 {
+  "env": {
+    "browser": true,
+    "node": true
+  },
   "extends": [ "eslint:recommended" ],
   "overrides": [
     {
@@ -22,6 +26,6 @@
     "build/"
   ],
   "rules": {
-    "no-undef": "warn"
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   }
 }
