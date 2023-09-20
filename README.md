@@ -51,6 +51,7 @@ Please add the example script below to package.json.
     "xlsx-to-json-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
     "xlsx-to-directory": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract",
     "json-zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx",
+    "json-directory-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n -d ./i18n.xlsx --auto-compress",
     "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx"
   },
 }
