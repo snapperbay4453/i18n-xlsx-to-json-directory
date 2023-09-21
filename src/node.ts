@@ -17,19 +17,19 @@ import {
 
 export const convertXlsxToJsonZip = async (source: string, destination: string, {
   autoExtract = false,
-  defaultExportFileType = undefined,
+  exportFileType = undefined,
 } = {}) => {
   const arrayBuffer = await readFileViaNode(source);
   const workbookJson = await convertXlsxArrayBufferToWorkbookJson(arrayBuffer);
 
   if(autoExtract) {
-    const arrayBufferMap = await convertWorkbookJsonToArrayBufferMap(workbookJson, { defaultExportFileType });
+    const arrayBufferMap = await convertWorkbookJsonToArrayBufferMap(workbookJson, { exportFileType });
     for(const [path, arrayBuffer] of arrayBufferMap) {
       await writeFileViaNode(`${destination}${path}`, arrayBuffer);
     }
     return arrayBufferMap;
   } else {
-    const zipArrayBuffer = await convertWorkbookJsonToZipArrayBuffer(workbookJson, { defaultExportFileType });
+    const zipArrayBuffer = await convertWorkbookJsonToZipArrayBuffer(workbookJson, { exportFileType });
     await writeFileViaNode(destination, zipArrayBuffer);
     return zipArrayBuffer;
   }
@@ -78,7 +78,7 @@ program.command('xlsx-to-json-zip')
     const exportFileType = options.exportFileType ?? undefined;
     convertXlsxToJsonZip(source, destination, {
       autoExtract: autoExtract,
-      defaultExportFileType: exportFileType,
+      exportFileType: exportFileType,
     });
   });
 

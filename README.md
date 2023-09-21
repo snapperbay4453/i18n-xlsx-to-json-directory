@@ -9,89 +9,118 @@
 
 Library that converts and downloads multilingual data stored in xlsx files into a json directory structure. The directory structure is tailored to the i18next library.
 
-Supports browser and node environments.
+Supports direct execution via npx commands. It also supports importing from browser and Node environments.
 
 
-## Usage in Browser Environment
+## Direct usage
 
-Import the library into the script file as shown below.
+Examples of commands that can be executed directly from the terminal include the following.
 
-```javascript
-import {
-  convertXlsxToJsonZip,
-  convertJsonZipToXlsx,
-  createTemplateXlsx,
-} from 'i18n-xlsx-to-json-directory/browser';
+```bash
+npx i18n-xlsx-to-json-directory template-xlsx -d ./template_i18n.xlsx
+npx i18n-xlsx-to-json-directory xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js
+npx i18n-xlsx-to-json-directory xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract
+npx i18n-xlsx-to-json-directory json-zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx
+npx i18n-xlsx-to-json-directory json-zip-to-xlsx -s ./i18n -d ./i18n.xlsx --auto-compress
 ```
 
-### convertXlsxToJsonZip(file)
+### template-xlsx
 
-Convert the xlsx file to the json directory structure, then compress it to create and download the zip file.
-
-### convertJsonZipToXlsx(file, options)
-
-Analyze the zip file, then create and download the xlsx file.
+Create and save template xlsx files.
 
 #### options
 
-defaultExportFileType: Create a default index script file to export each language and namespace. ('js' || 'ts' || undefined)
+-d, --destination: The path on which the converted file will be stored.
 
-### createTemplateXlsx()
+### xlsx-to-json-zip
 
-Create and download template xlsx file.
-
-
-## Usage in Node Environment
-
-Please add the example script below to package.json.
-
-```json
-{
-  "scripts": {
-    "xlsx-to-json-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
-    "xlsx-to-directory": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract",
-    "json-zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx",
-    "json-directory-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n -d ./i18n.xlsx --auto-compress",
-    "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx"
-  },
-}
-```
-
-### npm run xlsx-to-json-zip
-
-Convert the xlsx file to the json directory structure, then compress it to create and download the zip file.
+After converting the xlsx file into a json directory structure, compress it to create and download a zip file.
 
 #### options
 
--s, --source: Path to recall files to convert.
+-s, --source: The path to import the file you want to convert.
 
--d, --destination: Path where the converted file is stored.
+-d, --destination: The path on which the converted file will be stored.
 
---export-file-type: Create a default index script file to export each language and namespace. ('js' || 'ts' || undefined)
+--auto-extract: Automatically decompress converted zip files. You must specify a directory in the -d option.
 
---auto-extract: Automatically decompresses converted zip files. You must specify a directory in the -d option.
+--export-file-type: Creates a default index script file that exports each language and namespace.('js' || 'ts' || undefined)
 
-### npm run json-zip-to-xlsx
+### json-zip-to-xlsx
 
-Analyze the zip file, then create and download the xlsx file.
+After analyzing the zip file, create and download the xlsx file.
 
 #### options
 
--s, --source: Path to recall files to convert.
+-s, --source: The path to import the file you want to convert.
 
--d, --destination: Path where the converted file is stored.
+-d, --destination: The path on which the converted file will be stored.
 
 --auto-compress: Automatically compresses and converts the selected directory. You must specify a directory in the -d option.
 
-### npm run template-xlsx
 
-Create and download template xlsx file.
+## Usage in a browser environment
+
+Import the library into the script file as follows.
+
+```javascript
+import {
+  createTemplateXlsx,
+  convertXlsxToJsonZip,
+  convertJsonZipToXlsx,
+} from 'i18n-xlsx-to-json-directory/browser';
+```
+
+### createTemplateXlsx()
+
+Create and save template xlsx files.
+
+### convertXlsxJsonToZip(file)
+
+After converting the xlsx file into a json directory structure, compress it to create and download a zip file.
 
 #### options
 
--s, --source: Path to recall files to convert.
+exportFileType: Creates a default index script file that exports each language and namespace.('js' || 'ts' || undefined)
 
--d, --destination: Path where the converted file is stored.
+### convertJsonZipToXlsx(file, options)
+
+After analyzing the zip file, create and download the xlsx file.
+
+
+## Usage in Node environment
+
+Import the library into the script file as follows.
+
+```javascript
+import {
+  createTemplateXlsx,
+  convertXlsxToJsonZip,
+  convertJsonZipToXlsx,
+} from 'i18n-xlsx-to-json-directory/node';
+```
+
+### createTemplateXlsx(destination)
+
+Create and save template xlsx files.
+
+### convertXlsxJsonToZip(source, destination, options)
+
+After converting the xlsx file into a json directory structure, compress it to create and download a zip file.
+
+#### options
+
+autoExtract: Automatically decompress converted zip files. You must specify a directory in the -d option.
+
+exportFileType: Creates a default index script file that exports each language and namespace.('js' || 'ts' || undefined)
+
+### convertJsonZipToXlsx(source, destination, options)
+
+After analyzing the zip file, create and download the xlsx file.
+
+#### options
+
+autoCompress: Automatically compresses and converts the selected directory. You must specify a directory in the -d option.
 
 
 ## Contributing

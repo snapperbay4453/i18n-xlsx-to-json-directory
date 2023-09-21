@@ -15,11 +15,11 @@ import {
 import { formatTimestamp } from '@/utils/datetime';
 
 export const convertXlsxToJsonZip = async (blob: Blob, {
-  defaultExportFileType = undefined
+  exportFileType = undefined
 } = {}) => {
   const arrayBuffer = await convertBlobToArrayBuffer(blob);
   const workbookJson = await convertXlsxArrayBufferToWorkbookJson(arrayBuffer);
-  const zipArrayBuffer = await convertWorkbookJsonToZipArrayBuffer(workbookJson, { defaultExportFileType });
+  const zipArrayBuffer = await convertWorkbookJsonToZipArrayBuffer(workbookJson, { exportFileType });
   const zipBlob = await convertArrayBufferToBlob(zipArrayBuffer);
   await writeFileViaBrowser(zipBlob, `i18n_${formatTimestamp()}.zip`);
   return zipBlob;

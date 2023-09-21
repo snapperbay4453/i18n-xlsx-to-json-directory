@@ -93,7 +93,7 @@ export const convertXlsxArrayBufferToWorkbookJson = async (
 
 export const convertWorkbookJsonToZipArrayBuffer = async (
   workbookJson: WorkbookJson, {
-    defaultExportFileType = undefined,
+    exportFileType = undefined,
   } = {}
 ) => {
   const zipBuilder = getZipBuilder();
@@ -111,15 +111,15 @@ export const convertWorkbookJsonToZipArrayBuffer = async (
       );
     }
 
-    if(defaultExportFileType) {
+    if(exportFileType) {
       const namespaceIndexArrayBuffer = createNamespaceIndexJsString(worksheetJsonNameList);
-      zipBuilder.folder(language).file(`index.${defaultExportFileType}`, namespaceIndexArrayBuffer);
+      zipBuilder.folder(language).file(`index.${exportFileType}`, namespaceIndexArrayBuffer);
     }
   }
 
-  if(defaultExportFileType) {
+  if(exportFileType) {
     const languageIndexArrayBuffer = createLanguageIndexJsString(languageList);
-    zipBuilder.file(`index.${defaultExportFileType}`, languageIndexArrayBuffer);
+    zipBuilder.file(`index.${exportFileType}`, languageIndexArrayBuffer);
   }
 
   const zipArrayBuffer = await zipBuilder.generateAsync({ type: 'arraybuffer' });
@@ -128,7 +128,7 @@ export const convertWorkbookJsonToZipArrayBuffer = async (
 
 export const convertWorkbookJsonToArrayBufferMap = async (
   workbookJson: WorkbookJson, {
-    defaultExportFileType = undefined,
+    exportFileType = undefined,
   } = {}
 ) => {
   const arrayBufferMap = new Map();
@@ -144,19 +144,19 @@ export const convertWorkbookJsonToArrayBufferMap = async (
       );
     }
 
-    if(defaultExportFileType) {
+    if(exportFileType) {
       const namespaceIndexArrayBuffer = createNamespaceIndexJsString(worksheetJsonNameList);
       arrayBufferMap.set(
-        `/${language}/index.${defaultExportFileType}`,
+        `/${language}/index.${exportFileType}`,
         namespaceIndexArrayBuffer
       );
     }
   }
 
-  if(defaultExportFileType) {
+  if(exportFileType) {
     const languageIndexArrayBuffer = createLanguageIndexJsString(languageList);
     arrayBufferMap.set(
-      `/index.${defaultExportFileType}`,
+      `/index.${exportFileType}`,
       languageIndexArrayBuffer
     );
   }

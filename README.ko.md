@@ -9,55 +9,30 @@
 
 xlsx 파일에 저장된 다국어 데이터를 json 디렉토리 구조로 변환 및 다운로드하는 라이브러리입니다. 디렉토리 구조는 i18next 라이브러리에 맞추어져 있습니다.
 
-브라우저 및 Node 환경을 지원합니다.
+npx 명령어를 통한 직접 실행을 지원합니다. 또한 브라우저 및 Node 환경에서의 import를 지원합니다.
 
 
-## 브라우저 환경에서의 사용법
+## 직접 사용하는 방법
 
-스크립트 파일에 라이브러리를 아래와 같이 import하세요.
+터미널에서 직접 실행할 수 있는 명령어의 예시는 아래와 같습니다.
 
-```javascript
-import {
-  convertXlsxToJsonZip,
-  convertJsonZipToXlsx,
-  createTemplateXlsx,
-} from 'i18n-xlsx-to-json-directory/browser';
+```bash
+npx i18n-xlsx-to-json-directory template-xlsx -d ./template_i18n.xlsx
+npx i18n-xlsx-to-json-directory xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js
+npx i18n-xlsx-to-json-directory xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract
+npx i18n-xlsx-to-json-directory json-zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx
+npx i18n-xlsx-to-json-directory json-zip-to-xlsx -s ./i18n -d ./i18n.xlsx --auto-compress
 ```
 
-### convertXlsxJsonToZip(file)
+### template-xlsx
 
-xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
-
-### convertJsonZipToXlsx(file, options)
-
-zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
-
-### createTemplateXlsx()
-
-템플릿 xlsx 파일을 생성 및 다운로드합니다.
+템플릿 xlsx 파일을 생성 및 저장합니다.
 
 #### options
 
-defaultExportFileType: 각 언어 및 네임스페이스를 export하는 기본 index 스크립트 파일을 생성합니다. ('js' || 'ts' || undefined)
+-d, --destination: 변환된 파일이 저장될 경로입니다.
 
-
-## Node 환경에서의 사용법
-
-package.json에 아래 예시 스크립트를 추가해주세요.
-
-```json
-{
-  "scripts": {
-    "xlsx-to-json-zip": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n.zip --export-file-type js",
-    "xlsx-to-json-directory": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs xlsx-to-json-zip -s ./i18n.xlsx -d ./i18n --export-file-type ts --auto-extract",
-    "json-zip-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n.zip -d ./i18n.xlsx",
-    "json-directory-to-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs json-zip-to-xlsx -s ./i18n -d ./i18n.xlsx --auto-compress",
-    "template-xlsx": "node ./node_modules/i18n-xlsx-to-json-directory/dist/node.cjs template-xlsx -d ./template_i18n.xlsx"
-  },
-}
-```
-
-### npm run xlsx-to-json-zip
+### xlsx-to-json-zip
 
 xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
 
@@ -67,13 +42,13 @@ xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zi
 
 -d, --destination: 변환된 파일이 저장될 경로입니다.
 
---export-file-type: 각 언어 및 네임스페이스를 export하는 기본 index 스크립트 파일을 생성합니다. ('js' || 'ts' || undefined)
-
 --auto-extract: 변환된 zip 파일을 자동으로 압축 해제합니다. -d 옵션에 디렉토리를 지정해야 합니다.
 
-### npm run json-zip-to-xlsx
+--export-file-type: 각 언어 및 네임스페이스를 export하는 기본 index 스크립트 파일을 생성합니다. ('js' || 'ts' || undefined)
 
-.zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
+### json-zip-to-xlsx
+
+zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
 
 #### options
 
@@ -83,15 +58,69 @@ xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zi
 
 --auto-compress: 선택한 디렉터리를 자동으로 압축한 후 변환합니다. -d 옵션에 디렉토리를 지정해야 합니다.
 
-### npm run template-xlsx
 
-템플릿 xlsx 파일을 생성 및 저장합니다.
+## 브라우저 환경에서 사용하는 방법
+
+스크립트 파일에 라이브러리를 아래와 같이 import하세요.
+
+```javascript
+import {
+  createTemplateXlsx,
+  convertXlsxToJsonZip,
+  convertJsonZipToXlsx,
+} from 'i18n-xlsx-to-json-directory/browser';
+```
+
+### createTemplateXlsx()
+
+템플릿 xlsx 파일을 생성 및 다운로드합니다.
+
+### convertXlsxJsonToZip(file)
+
+xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
 
 #### options
 
--s, --source: 변환할 파일을 불러올 경로입니다.
+exportFileType: 각 언어 및 네임스페이스를 export하는 기본 index 스크립트 파일을 생성합니다. ('js' || 'ts' || undefined)
 
--d, --destination: 변환된 파일이 저장될 경로입니다.
+### convertJsonZipToXlsx(file, options)
+
+zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
+
+
+## Node 환경에서 사용하는 방법
+
+스크립트 파일에 라이브러리를 아래와 같이 import하세요.
+
+```javascript
+import {
+  createTemplateXlsx,
+  convertXlsxToJsonZip,
+  convertJsonZipToXlsx,
+} from 'i18n-xlsx-to-json-directory/node';
+```
+
+### createTemplateXlsx(destination)
+
+템플릿 xlsx 파일을 생성 및 다운로드합니다.
+
+### convertXlsxJsonToZip(source, destination, options)
+
+xlsx 파일을 json 디렉토리 구조로 변환한 후, 이를 압축하여 zip 파일을 생성 및 다운로드합니다.
+
+#### options
+
+autoExtract: 변환된 zip 파일을 자동으로 압축 해제합니다. -d 옵션에 디렉토리를 지정해야 합니다.
+
+exportFileType: 각 언어 및 네임스페이스를 export하는 기본 index 스크립트 파일을 생성합니다. ('js' || 'ts' || undefined)
+
+### convertJsonZipToXlsx(source, destination, options)
+
+zip 파일을 분석한 후, xlsx 파일을 생성 및 다운로드합니다.
+
+#### options
+
+autoCompress: 선택한 디렉터리를 자동으로 압축한 후 변환합니다. -d 옵션에 디렉토리를 지정해야 합니다.
 
 
 ## 기여

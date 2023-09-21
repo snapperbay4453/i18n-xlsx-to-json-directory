@@ -36,6 +36,7 @@ export default [
     output: {
       file: './dist/node.cjs',
       format: 'cjs',
+      banner: '#!/usr/bin/env node',
     },
     plugins: [
       alias({
