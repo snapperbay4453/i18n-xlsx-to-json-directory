@@ -75,7 +75,7 @@ import {
 
 Create and save template xlsx files.
 
-### convertXlsxJsonToZip(file)
+### convertXlsxToJsonZip(file)
 
 After converting the xlsx file into a json directory structure, compress it to create and download a zip file.
 
@@ -104,7 +104,7 @@ import {
 
 Create and save template xlsx files.
 
-### convertXlsxJsonToZip(source, destination, options)
+### convertXlsxToJsonZip(source, destination, options)
 
 After converting the xlsx file into a json directory structure, compress it to create and download a zip file.
 
