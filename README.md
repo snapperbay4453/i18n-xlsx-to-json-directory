@@ -7,7 +7,7 @@
 ![](https://img.shields.io/github/last-commit/snapperbay4453/i18n-xlsx-to-json-directory)
 
 
-Library that converts and downloads multilingual data stored in xlsx files into a json directory structure. The directory structure is tailored to the i18next library.
+Library that converts and downloads multilingual data stored in xlsx files into a json directory structure, and vice versa. The directory structure is tailored to the i18next library.
 
 Supports direct execution via npx commands. It also supports importing from browser and Node environments.
 
@@ -75,7 +75,7 @@ import {
 
 Create and save template xlsx files.
 
-### convertXlsxToJsonZip(file)
+### convertXlsxToJsonZip(file, options)
 
 After converting the xlsx file into a json directory structure, compress it to create and download a zip file.
 
@@ -83,7 +83,7 @@ After converting the xlsx file into a json directory structure, compress it to c
 
 exportFileType: Creates a default index script file that exports each language and namespace.('js' || 'ts' || undefined)
 
-### convertJsonZipToXlsx(file, options)
+### convertJsonZipToXlsx(file)
 
 After analyzing the zip file, create and download the xlsx file.
 
