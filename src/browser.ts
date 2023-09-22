@@ -14,6 +14,14 @@ import {
 } from '@/utils/binary';
 import { formatTimestamp } from '@/utils/datetime';
 
+
+export const createTemplateXlsx = async () => {
+  const xlsxArrayBuffer = await createTemplateXlsxArrayBuffer();
+  const xlsxBlob = await convertArrayBufferToBlob(xlsxArrayBuffer);
+  await writeFileViaBrowser(xlsxBlob, `template_i18n_${formatTimestamp()}.xlsx`);
+  return xlsxBlob;
+};
+
 export const convertXlsxToJsonZip = async (blob: Blob, {
   exportFileType = undefined
 } = {}) => {
@@ -31,12 +39,5 @@ export const convertJsonZipToXlsx = async (blob: Blob) => {
   const xlsxArrayBuffer = await convertWorkbookJsonToXlsxArrayBuffer(workbookJson);
   const xlsxBlob = await convertArrayBufferToBlob(xlsxArrayBuffer);
   await writeFileViaBrowser(xlsxBlob, `i18n_${formatTimestamp()}.xlsx`);
-  return xlsxBlob;
-};
-
-export const createTemplateXlsx = async () => {
-  const xlsxArrayBuffer = await createTemplateXlsxArrayBuffer();
-  const xlsxBlob = await convertArrayBufferToBlob(xlsxArrayBuffer);
-  await writeFileViaBrowser(xlsxBlob, `template_i18n_${formatTimestamp()}.xlsx`);
   return xlsxBlob;
 };
