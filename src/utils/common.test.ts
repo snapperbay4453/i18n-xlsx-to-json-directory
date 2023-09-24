@@ -1,9 +1,4 @@
-import { afterEach, beforeEach } from 'node:test';
-import { getByteSize, stringToArrayBuffer } from './common';
-
-afterEach(() => {
-  jest.clearAllMocks();
-});
+import { getByteSize } from './common';
 
 describe("within /utils/common.ts file", () => {
   describe("within getByteSize function", () => {

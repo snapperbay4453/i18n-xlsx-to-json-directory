@@ -2,8 +2,8 @@ import { Command } from 'commander';
 import { compressedFilenameRegex, sheetFilenameRegex } from '@/consts/file-extension';
 import { WorkbookJson } from '@/models/workbook';
 import {
-  convertArrayBufferMapToWorkbookJson,
-  convertWorkbookJsonToArrayBufferMap,
+  convertDirectoryDescendantsArrayBufferMapToWorkbookJson,
+  convertWorkbookJsonToDirectoryDescendantsArrayBufferMap,
   convertWorkbookJsonToXlsxArrayBuffer,
   convertWorkbookJsonToZipArrayBuffer,
   convertXlsxArrayBufferToWorkbookJson,
@@ -11,7 +11,7 @@ import {
   createTemplateXlsxArrayBuffer,
 } from '@/services/sheet';
 import {
-  getDirectoryFileArrayBufferMap,
+  getDirectoryDescendantsArrayBufferMapViaNode,
   readFileViaNode,
   writeFileViaNode,
 } from '@/utils/nodeFileIo';
@@ -44,7 +44,7 @@ export const convertXlsxToJsonZip = async (source: string, destination: string, 
     const workbookJson = await convertXlsxArrayBufferToWorkbookJson(arrayBuffer);
   
     if(autoExtract) {
-      const arrayBufferMap = await convertWorkbookJsonToArrayBufferMap(workbookJson, { exportFileType });
+      const arrayBufferMap = await convertWorkbookJsonToDirectoryDescendantsArrayBufferMap(workbookJson, { exportFileType });
       for(const [path, arrayBuffer] of arrayBufferMap) {
         await writeFileViaNode(`${destination}${path}`, arrayBuffer);
       }
@@ -70,8 +70,8 @@ export const convertJsonZipToXlsx = async (source: string, destination: string, 
   
     let workbookJson: WorkbookJson;
     if(autoCompress) {
-      const arrayBufferMap = await getDirectoryFileArrayBufferMap(source);
-      workbookJson = await convertArrayBufferMapToWorkbookJson(arrayBufferMap);
+      const arrayBufferMap = await getDirectoryDescendantsArrayBufferMapViaNode(source);
+      workbookJson = await convertDirectoryDescendantsArrayBufferMapToWorkbookJson(arrayBufferMap);
     } else {
       const arrayBuffer = await readFileViaNode(source);
       workbookJson = await convertZipArrayBufferToWorkbookJson(arrayBuffer);

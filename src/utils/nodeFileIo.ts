@@ -16,7 +16,7 @@ const getDirectoryFilePathListRecursively = (directoryPath: string) => {
   return directoryFilePathList;
 };
 
-export const getDirectoryFileArrayBufferMap = async (directoryPath: string) => {
+export const getDirectoryDescendantsArrayBufferMapViaNode = async (directoryPath: string) => {
   const directroyFilePathList = getDirectoryFilePathListRecursively(directoryPath);
   const directoryFileMapWithAbsolutePath = new Map();
   directroyFilePathList.forEach((path: string) => {

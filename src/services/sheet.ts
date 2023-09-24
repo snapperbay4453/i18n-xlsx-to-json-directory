@@ -54,20 +54,6 @@ export const createTemplateXlsxArrayBuffer = async () => {
   return xlsxArrayBuffer;
 };
 
-export const convertWorkbookJsonToXlsxArrayBuffer = async (workbookJson: WorkbookJson) => {
-  const worksheetNameList = workbookJson.getWorksheetJsonNameList();
-  const workbook: Workbook = createEmptyWorkbook();
-
-  for (const worksheetName of worksheetNameList) {
-    const worksheetJson = workbookJson.getWorksheetJson(worksheetName);
-    const worksheet = createWorksheet(worksheetJson.getRecordList());
-    addWorksheetToWorkbook(workbook, worksheet, worksheetName);
-  }
-
-  const xlsxArrayBuffer = convertWorkbookToXlsxArrayBuffer(workbook);
-  return xlsxArrayBuffer;
-};
-
 export const convertXlsxArrayBufferToWorkbookJson = async (
   arrayBuffer: ArrayBuffer,
 ) => {
@@ -88,6 +74,57 @@ export const convertXlsxArrayBufferToWorkbookJson = async (
       else worksheetJson.updateRecord(key, record);
     })
   });
+  return workbookJson;
+};
+
+export const convertWorkbookJsonToXlsxArrayBuffer = async (workbookJson: WorkbookJson) => {
+  const worksheetNameList = workbookJson.getWorksheetJsonNameList();
+  const workbook: Workbook = createEmptyWorkbook();
+
+  for (const worksheetName of worksheetNameList) {
+    const worksheetJson = workbookJson.getWorksheetJson(worksheetName);
+    const worksheet = createWorksheet(worksheetJson.getRecordList());
+    addWorksheetToWorkbook(workbook, worksheet, worksheetName);
+  }
+
+  const xlsxArrayBuffer = convertWorkbookToXlsxArrayBuffer(workbook);
+  return xlsxArrayBuffer;
+};
+
+export const convertZipArrayBufferToWorkbookJson = async (arrayBuffer: ArrayBuffer) => {
+  const getLanguageAndNamespaceFromFilePath = (filePath: string) => {
+    const splitedFilePath = filePath.replace(/\.json$/i, '').replace(/\\/g, '/').split('/');
+    return {
+      language: splitedFilePath[0],
+      namespace: splitedFilePath[1],
+    };
+  };
+
+  const zip = await convertArrayBufferToZip(arrayBuffer);
+  const workbookJson = new WorkbookJson();
+
+  const groupifiedZip = Object.values(zip.files).reduce((acc: GroupifiedZipFiles, file: ZipFile) => {
+    if(file.dir) acc.directories.push(file);
+    else if(file.name.endsWith('.json')) acc.files.push(file);
+    return acc;
+  }, {
+    files: [],
+    directories: [],
+  });
+
+  for await (const zipFile of groupifiedZip.files) {
+    const { namespace } = getLanguageAndNamespaceFromFilePath(zipFile.name);
+    if(!workbookJson.hasWorksheet(namespace)) workbookJson.setWorksheetJson(namespace, new WorksheetJson());
+
+    const zipFileData = await zipFile.async('string');
+    var parsedZipFileData = JSON.parse(zipFileData);
+    
+    Object.values(parsedZipFileData).forEach((record: object) => {
+      const worksheetJson = workbookJson.getWorksheetJson(namespace);
+      worksheetJson.updateRecord(record[DEFAULT_COLUMN_NAME.key], record);
+    });
+  }
+
   return workbookJson;
 };
 
@@ -126,7 +163,7 @@ export const convertWorkbookJsonToZipArrayBuffer = async (
   return zipArrayBuffer;
 };
 
-export const convertWorkbookJsonToArrayBufferMap = async (
+export const convertWorkbookJsonToDirectoryDescendantsArrayBufferMap = async (
   workbookJson: WorkbookJson, {
     exportFileType = undefined,
   } = {}
@@ -164,44 +201,7 @@ export const convertWorkbookJsonToArrayBufferMap = async (
   return arrayBufferMap;
 };
 
-export const convertZipArrayBufferToWorkbookJson = async (arrayBuffer: ArrayBuffer) => {
-  const getLanguageAndNamespaceFromFilePath = (filePath: string) => {
-    const splitedFilePath = filePath.replace(/\.json$/i, '').replace(/\\/g, '/').split('/');
-    return {
-      language: splitedFilePath[0],
-      namespace: splitedFilePath[1],
-    };
-  };
-
-  const zip = await convertArrayBufferToZip(arrayBuffer) as ZipFiles;
-  const workbookJson = new WorkbookJson();
-
-  const groupifiedZip = Object.values(zip.files).reduce((acc: GroupifiedZipFiles, file: ZipFile) => {
-    if(file.dir) acc.directories.push(file);
-    else if(file.name.endsWith('.json')) acc.files.push(file);
-    return acc;
-  }, {
-    files: [],
-    directories: [],
-  });
-
-  for await (const zipFile of groupifiedZip.files) {
-    const { namespace } = getLanguageAndNamespaceFromFilePath(zipFile.name);
-    if(!workbookJson.hasWorksheet(namespace)) workbookJson.setWorksheetJson(namespace, new WorksheetJson());
-
-    const zipFileData = await zipFile.async('string');
-    var parsedZipFileData = JSON.parse(zipFileData);
-    
-    Object.values(parsedZipFileData).forEach((record: object) => {
-      const worksheetJson = workbookJson.getWorksheetJson(namespace);
-      worksheetJson.updateRecord(record[DEFAULT_COLUMN_NAME.key], record);
-    });
-  }
-
-  return workbookJson;
-};
-
-export const convertArrayBufferMapToWorkbookJson = async (arrayBufferMap: Map<string, ArrayBuffer>) => {
+export const convertDirectoryDescendantsArrayBufferMapToWorkbookJson = async (arrayBufferMap: Map<string, ArrayBuffer>) => {
   const getLanguageAndNamespaceFromFilePath = (filePath: string) => {
     const splitedFilePath = filePath.replace(/\.json$/i, '').replace(/\\/g, '/').split('/');
     return {

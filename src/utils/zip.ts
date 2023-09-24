@@ -1,4 +1,4 @@
-import JSZip from 'jszip/dist/jszip';
+import JSZip from 'jszip';
 
 export interface ZipFile {
   name: string;
@@ -13,4 +13,7 @@ export interface GroupifiedZipFiles {
   directories: ZipFile[];
 }
 
-export const getZipBuilder = () => new JSZip();
+export const getZipBuilder = () => {
+  const builder = new JSZip();
+  return builder;
+};

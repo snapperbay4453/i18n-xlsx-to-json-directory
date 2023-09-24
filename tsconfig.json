@@ -7,10 +7,13 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"noEmit": true,
+		"allowJs" : true,
 		"allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
+		"esModuleInterop": true,
 		"paths": {
       "@/*": [ "src/*" ],
+      "#/*": [ "tests/*" ],
       "file-saver-es": [
         "@types/file-saver"
       ]
