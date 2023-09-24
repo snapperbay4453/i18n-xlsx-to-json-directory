@@ -5,9 +5,6 @@ export interface ZipFile {
   dir: boolean;
   async: (_type: string) => Promise<any>
 }
-export interface ZipFiles {
-  files: ZipFile[];
-}
 export interface GroupifiedZipFiles {
   files: ZipFile[];
   directories: ZipFile[];

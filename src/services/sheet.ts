@@ -13,7 +13,7 @@ import {
   iterateWorksheet
 } from '@/utils/sheet';
 import { getZipBuilder } from '@/utils/zip';
-import type { GroupifiedZipFiles, ZipFiles, ZipFile } from '@/utils/zip';
+import type { GroupifiedZipFiles, ZipFile } from '@/utils/zip';
 import { ArrayBufferToString } from '@/utils/common';
 
 /**
