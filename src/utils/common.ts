@@ -33,19 +33,21 @@ export const stringToArrayBuffer = (str: string) => {
 };
 
 export const ArrayBufferToString = (arrayBuffer: ArrayBuffer) => {
-  var str = new TextDecoder().decode(arrayBuffer);
+  const str = new TextDecoder().decode(arrayBuffer);
   return str;  
 }
 
 export const JsonMapper = (() => {
   // https://stackoverflow.com/questions/29085197/how-do-you-json-stringify-an-es6-map
+  // https://stackoverflow.com/questions/23097928/node-js-throws-btoa-is-not-defined-error
 
   function replacer(_key: any, value: any) {
     if(value instanceof ArrayBuffer) {
-      var dec = new TextDecoder("utf-8");
+      const dec = new TextDecoder("utf-8");
+      const b64encoded = Buffer.from(dec.decode(value)).toString('base64');
       return {
         dataType: 'ArrayBuffer',
-        value: dec.decode(value),
+        value: b64encoded,
       };
     } else if(value instanceof Map) {
       return {
@@ -60,8 +62,9 @@ export const JsonMapper = (() => {
   function reviver(_key: any, value: any) {
     if(typeof value === 'object' && value !== null) {
       if (value.dataType === 'ArrayBuffer') {
-        var enc = new TextEncoder();
-        return enc.encode(value);
+        const enc = new TextEncoder();
+        const b64decoded = enc.encode(Buffer.from(value, 'base64').toString());
+        return b64decoded;
       } else if (value.dataType === 'Map') {
         return new Map(value.value);
       }
