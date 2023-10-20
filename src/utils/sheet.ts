@@ -2,6 +2,7 @@ import * as XLSX from 'xlsx';
 import { Workbook, WorkbookJson } from '@/models/workbook';
 import { Worksheet, WorksheetJson } from '@/models/worksheet';
 import { getByteSize, stringToArrayBuffer } from './common';
+import { DEFAULT_COLUMN_NAME } from '@/consts/column';
 
 /**
  * Calculates worksheet column width based on worksheet data.
@@ -38,11 +39,18 @@ export const autoFitWorksheetColumnWidth = (worksheet: Worksheet) => {
 /**
  * Returns iterator of WorksheetJson objects from WorkbookJson object.
  */
-export async function* iterateWorksheet(workbookJson: WorkbookJson) {
+export async function* iterateLanguageOfWorksheet(workbookJson: WorkbookJson, language: string) {
   const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
   for(const worksheetJsonName of worksheetJsonNameList) {
     const worksheetJson = workbookJson.getWorksheetJson(worksheetJsonName);
-    const worksheetArrayBuffer = JSON.stringify(worksheetJson.getRecordList(), null, 2);
+    const recordList = worksheetJson.getRecordList();
+    const recordIteratedByLanguage = recordList.reduce((acc, record) => {
+      return {
+        ...acc,
+        [record[DEFAULT_COLUMN_NAME.key]]: record[language]
+      }
+    }, {});
+    const worksheetArrayBuffer = JSON.stringify(recordIteratedByLanguage, null, 2);
     yield {
       name: worksheetJsonName,
       arrayBuffer: worksheetArrayBuffer,

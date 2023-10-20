@@ -1,17 +1,5 @@
-[
-  {
-    "code": "add",
-    "en": "Add",
-    "ko": "추가"
-  },
-  {
-    "code": "edit",
-    "en": "Edit",
-    "ko": "수정"
-  },
-  {
-    "code": "delete",
-    "en": "Delete",
-    "ko": "삭제"
-  }
-]
+{
+  "add": "추가",
+  "edit": "수정",
+  "delete": "삭제"
+}

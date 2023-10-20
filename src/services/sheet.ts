@@ -10,7 +10,7 @@ import {
   convertXlsxArrayBufferToWorkbook,
   convertWorkbookToXlsxArrayBuffer,
   convertWorksheetToWorksheetJson,
-  iterateWorksheet
+  iterateLanguageOfWorksheet
 } from '@/utils/sheet';
 import { getZipBuilder } from '@/utils/zip';
 import type { GroupifiedZipFiles, ZipFile } from '@/utils/zip';
@@ -113,18 +113,20 @@ export const convertZipArrayBufferToWorkbookJson = async (arrayBuffer: ArrayBuff
   });
 
   for await (const zipFile of groupifiedZip.files) {
-    const { namespace } = getLanguageAndNamespaceFromFilePath(zipFile.name);
+    const { language, namespace } = getLanguageAndNamespaceFromFilePath(zipFile.name);
     if(!workbookJson.hasWorksheet(namespace)) workbookJson.setWorksheetJson(namespace, new WorksheetJson());
 
     const zipFileData = await zipFile.async('string');
     var parsedZipFileData = JSON.parse(zipFileData);
     
-    Object.values(parsedZipFileData).forEach((record: object) => {
-      const worksheetJson = workbookJson.getWorksheetJson(namespace);
-      worksheetJson.updateRecord(record[DEFAULT_COLUMN_NAME.key], record);
+    const worksheetJson = workbookJson.getWorksheetJson(namespace);
+    Object.entries(parsedZipFileData).forEach(([key, value]) => {
+      worksheetJson.updateRecord(key, {
+        [DEFAULT_COLUMN_NAME.key]: key,
+        [language]: value,
+      });
     });
   }
-
   return workbookJson;
 };
 
@@ -137,11 +139,9 @@ export const convertWorkbookJsonToZipArrayBuffer = async (
   const languageList = workbookJson.getWorksheetJsonFieldList({ includeKey: false });
 
   for(const language of languageList) {
-    zipBuilder.folder(language);
-
     const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
 
-    for await (const worksheetArrayBufferIterator of iterateWorksheet(workbookJson)) {
+    for await (const worksheetArrayBufferIterator of iterateLanguageOfWorksheet(workbookJson, language)) {
       zipBuilder.folder(language).file(
         `${worksheetArrayBufferIterator.name}.json`,
         worksheetArrayBufferIterator.arrayBuffer
@@ -174,7 +174,7 @@ export const convertWorkbookJsonToDirectoryDescendantsArrayBufferMap = async (
   for(const language of languageList) {
     const worksheetJsonNameList = workbookJson.getWorksheetJsonNameList();
 
-    for await (const worksheetArrayBufferIterator of iterateWorksheet(workbookJson)) {
+    for await (const worksheetArrayBufferIterator of iterateLanguageOfWorksheet(workbookJson, language)) {
       arrayBufferMap.set(
         `/${language}/${worksheetArrayBufferIterator.name}.json`,
         worksheetArrayBufferIterator.arrayBuffer

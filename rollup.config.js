@@ -42,7 +42,7 @@ export default [
       alias({
         entries: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
       }),
-      resolve({ extensions }),
+      resolve({ browser: false, extensions }),
       commonjs(),
       eslint(),
       typescript(),

@@ -1,12 +1,4 @@
-[
-  {
-    "code": "title",
-    "en": "Page Title",
-    "ko": "페이지 제목"
-  },
-  {
-    "code": "content",
-    "en": "Page content",
-    "ko": "페이지 콘텐츠"
-  }
-]
+{
+  "title": "Page Title",
+  "content": "Page content"
+}

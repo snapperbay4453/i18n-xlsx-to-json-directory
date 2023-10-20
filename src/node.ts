@@ -20,7 +20,7 @@ import {
 export const createTemplateXlsx = async (destination: string) => {
   try {
     if(!destination) throw new Error('destination path is not specified.');
-    if(!sheetFilenameRegex.test(destination)) throw new Error('destination path doesn\'t have a sheet file extension');
+    if(!sheetFilenameRegex.test(destination)) throw new Error('destination path doesn\'t have a sheet file extension.');
   
     const xlsxArrayBuffer = await createTemplateXlsxArrayBuffer();
     await writeFileViaNode(destination, xlsxArrayBuffer);
@@ -37,8 +37,8 @@ export const convertXlsxToJsonZip = async (source: string, destination: string, 
   try {
     if(!source) throw new Error('source path is not specified.');
     if(!destination) throw new Error('destination path is not specified.');
-    if(!sheetFilenameRegex.test(source)) throw new Error('source path doesn\'t have a sheet file extension');
-    if(!autoExtract && !compressedFilenameRegex.test(destination)) throw new Error('destination path doesn\'t have a compressed file extension');
+    if(!sheetFilenameRegex.test(source)) throw new Error('source path doesn\'t have a sheet file extension.');
+    if(!autoExtract && !compressedFilenameRegex.test(destination)) throw new Error('destination path doesn\'t have a compressed file extension.');
     
     const arrayBuffer = await readFileViaNode(source);
     const workbookJson = await convertXlsxArrayBufferToWorkbookJson(arrayBuffer);
@@ -65,8 +65,8 @@ export const convertJsonZipToXlsx = async (source: string, destination: string, 
   try {
     if(!source) throw new Error('source path is not specified.');
     if(!destination) throw new Error('destination path is not specified.');
-    if(!autoCompress && !sheetFilenameRegex.test(source)) throw new Error('source path doesn\'t have a compressed file extension');
-    if(!compressedFilenameRegex.test(destination)) throw new Error('destination path doesn\'t have a sheet file extension');
+    if(!autoCompress && !sheetFilenameRegex.test(source)) throw new Error('source path doesn\'t have a compressed file extension.');
+    if(!compressedFilenameRegex.test(destination)) throw new Error('destination path doesn\'t have a sheet file extension.');
   
     let workbookJson: WorkbookJson;
     if(autoCompress) {
