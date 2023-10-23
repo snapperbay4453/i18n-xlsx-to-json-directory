@@ -20,12 +20,17 @@
 		"email": "snapperbay4453@gmail.com",
 		"url": "https://snapperbay4453.github.io"
 	},
-	"exports": {
-		"./browser": "./dist/browser.js",
-		"./node": "./dist/node.cjs"
+	"homepage": "https://github.com/snapperbay4453/i18n-xlsx-to-json-directory",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/snapperbay4453/i18n-xlsx-to-json-directory.git"
 	},
 	"bugs": {
 		"url": "https://github.com/snapperbay4453/i18n-xlsx-to-json-directory/issues"
+	},
+	"exports": {
+		"./browser": "./dist/browser.js",
+		"./node": "./dist/node.cjs"
 	},
 	"scripts": {
 		"__clear": "rimraf --glob dist",
