@@ -39,3 +39,7 @@ jest.config.js
 # Doc
 doc
 docs
+
+# Test
+test
+tests
